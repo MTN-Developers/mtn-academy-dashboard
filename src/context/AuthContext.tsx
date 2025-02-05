@@ -5,7 +5,7 @@ import { NavigateFunction } from "react-router-dom";
 import {
   User,
   Role,
-  Permission,
+  // Permission,
   LoginCredentials,
   AuthResponse,
 } from "../types/auth";
