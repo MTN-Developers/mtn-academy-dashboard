@@ -9,6 +9,8 @@ import ChangeThemes from "./ChangesThemes";
 import { menu } from "./menu/data";
 import MenuItem from "./menu/MenuItem";
 import mtnLogo from "../../public/images/mtn-logo.svg";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isFullScreen, setIsFullScreen] = React.useState(true);
@@ -16,12 +18,19 @@ const Navbar = () => {
 
   const [isDrawerOpen, setDrawerOpen] = React.useState(false);
   const toggleDrawer = () => setDrawerOpen(!isDrawerOpen);
+  const { logout } = useAuth();
 
   const toggleFullScreen = () => {
     setIsFullScreen((prev) => !prev);
   };
 
   const navigate = useNavigate();
+
+  // handlers
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   React.useEffect(() => {
     if (isFullScreen) {
@@ -64,9 +73,9 @@ const Navbar = () => {
                 to={"/"}
                 className="flex items-center gap-1 xl:gap-2 mt-1 mb-5"
               >
-                <DiReact className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-6xl text-primary animate-spin-slow" />
+                {/* <DiReact className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-6xl text-primary animate-spin-slow" /> */}
                 <span className="text-[16px] leading-[1.2] sm:text-lg xl:text-xl 2xl:text-2xl font-semibold text-base-content dark:text-neutral-200">
-                  React Dashboard
+                  MTN Academy
                 </span>
               </Link>
               {menu.map((item, index) => (
@@ -104,7 +113,13 @@ const Navbar = () => {
         >
           <HiSearch className="text-xl 2xl:text-2xl 3xl:text-3xl" />
         </button> */}
-        <a href="https://romamph.com/" target="_blank" className="badge badge-neutral cursor-pointer">by Roma</a>
+        <a
+          href="https://romamph.com/"
+          target="_blank"
+          className="badge badge-neutral cursor-pointer hidden lg:block"
+        >
+          by Roma
+        </a>
         {/* fullscreen */}
         <button
           onClick={toggleFullScreen}
@@ -157,7 +172,7 @@ const Navbar = () => {
                 <a className="justify-between">My Profile</a>
               </li>
             </Link>
-            <li onClick={() => navigate("/login")}>
+            <li onClick={() => handleLogout()}>
               <a>Log Out</a>
             </li>
           </ul>

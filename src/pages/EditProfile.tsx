@@ -18,7 +18,7 @@ const EditProfile = () => {
       const imageUpload = e.target.files[0];
       setSelectedFile(imageUpload);
       setPreview(URL.createObjectURL(imageUpload));
-      console.log('Selected File: ', selectedFile);
+      // console.log('Selected File: ', selectedFile);
     }
   };
   const handleIconClick = () => {

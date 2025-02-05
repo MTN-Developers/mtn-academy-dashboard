@@ -1,6 +1,7 @@
 // components/ProtectedRoute.tsx
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Loader from "./Loader";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,11 +14,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredModule,
   requiredAction = "read",
 }) => {
-  const { isAuthenticated, isLoading, hasPermission } = useAuth();
+  const { isAuthenticated, loading, hasPermission } = useAuth();
   const location = useLocation();
 
-  if (isLoading) {
-    return <div>Loading...</div>; // Replace with your loading component
+  if (loading) {
+    return <Loader />; // Replace with your loading component
   }
 
   if (!isAuthenticated) {

@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthResponse } from "../types/auth";
 
 export const baseURL =
-  import.meta.env.VITE_BASE_URL || "https://staging.api.mtninstitute.net/api";
+  import.meta.env.VITE_BASE_URL || "https://api.mtnlive.mtninstitute.net/api";
 
 const axiosInstance = axios.create({
   baseURL,
@@ -47,6 +47,8 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access_token}`;
         return axiosInstance(originalRequest);
       } catch (error) {
+        // console.log("removed from axios instance");
+
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";

@@ -5,11 +5,11 @@ export const fetchTopDeals = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/topdeals')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -21,11 +21,11 @@ export const fetchTotalUsers = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalusers')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -37,11 +37,11 @@ export const fetchTotalProducts = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalproducts')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -53,11 +53,11 @@ export const fetchTotalRatio = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalratio')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -69,11 +69,11 @@ export const fetchTotalRevenue = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalrevenue')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -85,11 +85,11 @@ export const fetchTotalSource = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalsource')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -101,11 +101,11 @@ export const fetchTotalVisit = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalvisit')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -119,11 +119,11 @@ export const fetchTotalRevenueByProducts = async () => {
       'https://react-admin-ui-v1-api.vercel.app/totalrevenue-by-product'
     )
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -135,11 +135,11 @@ export const fetchTotalProfit = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/totalprofit')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -151,11 +151,11 @@ export const fetchUsers = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/users')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -167,11 +167,11 @@ export const fetchSingleUser = async (id: string) => {
   const response = await axios
     .get(`https://react-admin-ui-v1-api.vercel.app/users/${id}`)
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -183,11 +183,11 @@ export const fetchProducts = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/products')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -199,11 +199,11 @@ export const fetchSingleProduct = async (id: string) => {
   const response = await axios
     .get(`https://react-admin-ui-v1-api.vercel.app/products/${id}`)
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -215,11 +215,11 @@ export const fetchOrders = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/orders')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -231,11 +231,11 @@ export const fetchPosts = async () => {
   const response = await axios
     .get('https://react-admin-ui-v1-api.vercel.app/posts')
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -247,11 +247,11 @@ export const fetchNotes = async () => {
   const response = await axios
     .get(`https://react-admin-ui-v1-api.vercel.app/notes?q=`)
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 
@@ -263,11 +263,11 @@ export const fetchLogs = async () => {
   const response = await axios
     .get(`https://react-admin-ui-v1-api.vercel.app/logs`)
     .then((res) => {
-      console.log('axios get:', res.data);
+      // console.log('axios get:', res.data);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
       throw err;
     });
 

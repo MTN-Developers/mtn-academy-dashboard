@@ -1,10 +1,8 @@
-// import React from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
   ScrollRestoration,
-  useNavigate,
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
@@ -25,34 +23,31 @@ import EditProfile from "./pages/EditProfile";
 import User from "./pages/User";
 import Product from "./pages/Product";
 import Login from "./pages/Login";
-import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Unauthorized from "./pages/Unauthorized";
 
 function App() {
   const Layout = () => {
-    const navigate = useNavigate();
-
     return (
-      <AuthProvider navigate={navigate}>
-        <div
-          id="rootContainer"
-          className="w-full p-0 m-0 overflow-visible min-h-screen flex flex-col justify-between"
-        >
-          <ToasterProvider />
-          <ScrollRestoration />
-          <div>
-            <Navbar />
-            <div className="w-full flex gap-0 pt-20 xl:pt-[96px] 2xl:pt-[112px] mb-auto">
-              <div className="hidden xl:block xl:w-[250px] 2xl:w-[280px] 3xl:w-[350px] border-r-2 border-base-300 dark:border-slate-700 px-3 xl:px-4 xl:py-1">
-                <Menu />
-              </div>
-              <div className="w-full px-4 xl:px-4 2xl:px-5 xl:py-2 overflow-clip">
-                <Outlet />
-              </div>
+      <div
+        id="rootContainer"
+        className="w-full p-0 m-0 overflow-visible min-h-screen flex flex-col justify-between"
+      >
+        <ToasterProvider />
+        <ScrollRestoration />
+        <div>
+          <Navbar />
+          <div className="w-full flex gap-0 pt-20 xl:pt-[96px] 2xl:pt-[112px] mb-auto">
+            <div className="hidden xl:block xl:w-[250px] 2xl:w-[280px] 3xl:w-[350px] border-r-2 border-base-300 dark:border-slate-700 px-3 xl:px-4 xl:py-1">
+              <Menu />
+            </div>
+            <div className="w-full px-4 xl:px-4 2xl:px-5 xl:py-2 overflow-clip">
+              <Outlet />
             </div>
           </div>
-          <Footer />
         </div>
-      </AuthProvider>
+        <Footer />
+      </div>
     );
   };
 
@@ -63,55 +58,107 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: (
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/profile",
-          element: <Profile />,
+          element: (
+            <ProtectedRoute requiredModule="user" requiredAction="read">
+              <Profile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/profile/edit",
-          element: <EditProfile />,
+          element: (
+            <ProtectedRoute requiredModule="user" requiredAction="update">
+              <EditProfile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/users",
-          element: <Users />,
+          element: (
+            <ProtectedRoute requiredModule="user" requiredAction="read">
+              <Users />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/users/:id",
-          element: <User />,
+          element: (
+            <ProtectedRoute requiredModule="user" requiredAction="read">
+              <User />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/products",
-          element: <Products />,
+          element: (
+            <ProtectedRoute requiredModule="product" requiredAction="read">
+              <Products />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/products/:id",
-          element: <Product />,
+          element: (
+            <ProtectedRoute requiredModule="product" requiredAction="read">
+              <Product />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/orders",
-          element: <Orders />,
+          element: (
+            <ProtectedRoute requiredModule="order" requiredAction="read">
+              <Orders />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/posts",
-          element: <Posts />,
+          element: (
+            <ProtectedRoute requiredModule="post" requiredAction="read">
+              <Posts />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/notes",
-          element: <Notes />,
+          element: (
+            <ProtectedRoute requiredModule="note" requiredAction="read">
+              <Notes />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/calendar",
-          element: <Calendar />,
+          element: (
+            <ProtectedRoute requiredModule="calendar" requiredAction="read">
+              <Calendar />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/charts",
-          element: <Charts />,
+          element: (
+            <ProtectedRoute requiredModule="chart" requiredAction="read">
+              <Charts />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/logs",
-          element: <Logs />,
+          element: (
+            <ProtectedRoute requiredModule="log" requiredAction="read">
+              <Logs />
+            </ProtectedRoute>
+          ),
         },
       ],
       errorElement: <Error />,
@@ -119,6 +166,10 @@ function App() {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/unauthorized",
+      element: <Unauthorized />,
     },
   ]);
 

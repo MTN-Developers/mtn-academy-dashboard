@@ -1,19 +1,26 @@
-// import React from 'react';
-import ChangeThemes from "../components/ChangesThemes";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import mtnLogo from "../../public/images/mtn-logo.svg";
-import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { authApi } from "../services/auth";
+import { useAuth } from "../context/AuthContext";
+import ChangeThemes from "../components/ChangesThemes";
+import Loader from "../components/Loader";
+import mtnLogo from "../../public/images/mtn-logo.svg";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { login, isAuthenticated, loading } = useAuth();
+
+  // ✅ Ensuring hooks always run in the same order
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      navigate("/");
+    }
+  }, [isAuthenticated, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // validate inputs
 
     if (!email || !password) {
       toast.error("Please fill in all fields");
@@ -21,34 +28,31 @@ const Login = () => {
     }
 
     try {
-      const response = await authApi.login({ email, password });
-      // Additional handling if needed
-      console.log(response.data.data.user);
+      await login(email, password);
       toast.success("Login successful!");
       navigate("/", { replace: true });
     } catch (error) {
-      // Error handling is already done in the context
-      console.error("Login error:", error);
-      toast.error(`Invalid credentials: ${error}`);
+      // console.error("Login error:", error);
+      toast.error("Invalid credentials");
     }
   };
 
+  // ✅ Correct placement for conditional rendering
+  if (loading) return <Loader />;
+
   return (
-    // screen
     <div className="w-full p-0 m-0">
-      {/* container */}
       <form
         className="w-full min-h-screen flex justify-center items-center bg-base-200 relative"
         onSubmit={handleSubmit}
       >
-        {/* theme */}
         <div className="absolute top-5 right-5 z-[99]">
           <ChangeThemes />
         </div>
         <div className="w-full h-screen xl:h-auto xl:w-[30%] 2xl:w-[25%] 3xl:w-[20%] bg-base-100 rounded-lg shadow-md flex flex-col items-center p-5 pb-7 gap-8 pt-20 xl:pt-7">
           <div className="flex items-center gap-1 xl:gap-2">
             <img src={mtnLogo} alt="logo" />
-            <span className="text-[18px] leading-[1.2] sm:text-lg xl:text-3xl 2xl:text-3xl font-semibold text-base-content dark:text-neutral-200">
+            <span className="text-[18px] sm:text-lg xl:text-3xl font-semibold text-base-content dark:text-neutral-200">
               MTN Academy
             </span>
           </div>
@@ -56,91 +60,27 @@ const Login = () => {
             Hello, 👋 Welcome Back!
           </span>
           <div className="w-full flex flex-col items-stretch gap-3">
-            <label className="input input-bordered min-w-full flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="w-4 h-4 opacity-70"
-              >
-                <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-                <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-              </svg>
+            <label className="input input-bordered flex items-center gap-2">
               <input
                 type="text"
-                className="grow input outline-none focus:outline-none border-none border-[0px] h-auto pl-1 pr-0"
+                className="grow input outline-none border-none pl-1"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </label>
             <label className="input input-bordered flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="w-4 h-4 opacity-70"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-                  clipRule="evenodd"
-                />
-              </svg>
               <input
                 type="password"
-                className="grow input outline-none focus:outline-none border-none border-[0px] h-auto pl-1 pr-0"
+                className="grow input outline-none border-none pl-1"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </label>
-            <div className="flex items-center justify-between">
-              <div className="form-control">
-                <label className="label cursor-pointer gap-2">
-                  <input
-                    type="checkbox"
-                    defaultChecked
-                    className="checkbox w-4 h-4 rounded-md checkbox-primary"
-                  />
-                  <span className="label-text text-xs">Remember me</span>
-                </label>
-              </div>
-              {/* <a
-                href="#"
-                className="link link-primary font-semibold text-xs no-underline"
-              >
-                Forgot Password?
-              </a> */}
-            </div>
             <button type="submit" className="btn btn-block btn-primary">
               Log In
             </button>
-            <div className="divider text-sm">OR</div>
-            <div className="w-full flex justify-center items-center gap-4">
-              <button className="btn btn-circle dark:btn-neutral">
-                <img
-                  className="w-6"
-                  src="/icons8-microsoft.svg"
-                  alt="microsoft"
-                />
-              </button>
-              <button className="btn btn-circle dark:btn-neutral">
-                <img className="w-6" src="/icons8-google.svg" alt="google" />
-              </button>
-              <button className="btn btn-circle dark:btn-neutral">
-                <img
-                  className="dark:hidden w-6"
-                  src="/icons8-apple-black.svg"
-                  alt="apple"
-                />
-                <img
-                  className="hidden dark:block w-6"
-                  src="/icons8-apple-white.svg"
-                  alt="apple"
-                />
-              </button>
-            </div>
           </div>
         </div>
       </form>
