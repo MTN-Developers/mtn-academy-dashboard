@@ -32,6 +32,14 @@ export const menu = [
         module: "user", // <--- define module
         action: "read", // <--- define action
       },
+      {
+        isLink: true,
+        url: "/accounting",
+        icon: HiOutlineUser,
+        label: "accounting",
+        module: "accounting", // <--- define module
+        action: "read", // <--- define action
+      },
     ],
   },
   {
@@ -113,16 +121,16 @@ export const menu = [
       },
     ],
   },
-  {
-    catalog: "miscellaneous",
-    listItems: [
-      {
-        isLink: true,
-        url: "/login",
-        icon: HiOutlineArrowLeftOnRectangle,
-        label: "log out",
-        // Typically no permission needed to see or to log out
-      },
-    ],
-  },
+  // {
+  //   catalog: "miscellaneous",
+  //   listItems: [
+  //     {
+  //       isLink: true,
+  //       url: "/login",
+  //       icon: HiOutlineArrowLeftOnRectangle,
+  //       label: "log out",
+  //       // Typically no permission needed to see or to log out
+  //     },
+  //   ],
+  // },
 ];

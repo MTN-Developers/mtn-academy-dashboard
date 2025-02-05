@@ -158,6 +158,12 @@ interface ITokens {
   refreshToken: string;
 }
 
+interface IRoleWithPermissions {
+  id: string;
+  role_name: string;
+  permissions: Permission[];
+}
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [tokens, setTokens] = useState<ITokens | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -171,6 +177,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const checkAuth = async () => {
     const savedRefreshToken = localStorage.getItem("refreshToken");
+    const savedRoleWithPermissions: IRoleWithPermissions | null | string =
+      localStorage.getItem("roleWithPermissions");
     if (savedRefreshToken) {
       try {
         const response = await authApi.refreshToken(savedRefreshToken);
@@ -182,7 +190,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.log("response from auth check auth", response.data.data);
 
         setIsAuthenticated(true);
-        
+        setPermissions(
+          savedRoleWithPermissions
+            ? JSON.parse(savedRoleWithPermissions).permissions
+            : []
+        );
       } catch (error) {
         // console.log("removed from checkauth", error);
 
@@ -200,21 +212,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setLoading(true);
       const response = await authApi.login({ email, password });
-      const { access_token, refresh_token } = response.data.data;
-      setTokens({
-        accessToken: access_token,
-        refreshToken: refresh_token,
-      });
-      setIsAuthenticated(true);
-      setPermissions(
-        response.data.data.roleWithPermissions.permissions || []
-      );
-      setRole(response.data.data.roleWithPermissions?.role_name || null);
-      localStorage.setItem("refreshToken", refresh_token);
-      localStorage.setItem("accessToken", access_token);
+
+      const { access_token, refresh_token, roleWithPermissions } =
+        response.data.data;
+
+      if (roleWithPermissions.role_name !== "user") {
+        setTokens({
+          accessToken: access_token,
+          refreshToken: refresh_token,
+        });
+        setIsAuthenticated(true);
+        setPermissions(
+          response.data.data.roleWithPermissions.permissions || []
+        );
+        setRole(response.data.data.roleWithPermissions?.role_name || null);
+        localStorage.setItem("refreshToken", refresh_token);
+        localStorage.setItem("accessToken", access_token);
+        localStorage.setItem(
+          "roleWithPermissions",
+          JSON.stringify(roleWithPermissions)
+        );
+      }
+
       setLoading(false);
     } catch (error) {
       toast.error(`error in authenticating context : ${error}`);
+      setLoading(false);
       throw error;
     }
   };
@@ -226,15 +249,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticated(false);
   };
 
-  const hasPermission = (module: string) => {
-    return permissions.some(
-      (permission) =>
-        permission.module === module &&
-        (permission.can_read ||
-          permission.can_create ||
-          permission.can_update ||
-          permission.can_delete)
-    );
+  const hasPermission = (
+    module: string,
+    action: "create" | "read" | "update" | "delete"
+  ) => {
+    const permission = permissions.find((p) => p.module === module);
+    if (!permission) return false;
+
+    // Now check the specific action
+    if (action === "create") return permission.can_create;
+    if (action === "read") return permission.can_read;
+    if (action === "update") return permission.can_update;
+    if (action === "delete") return permission.can_delete;
+
+    return false; // Default
   };
 
   return (

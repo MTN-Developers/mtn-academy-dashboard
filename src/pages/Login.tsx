@@ -52,9 +52,7 @@ const Login = () => {
         <div className="w-full h-screen xl:h-auto xl:w-[30%] 2xl:w-[25%] 3xl:w-[20%] bg-base-100 rounded-lg shadow-md flex flex-col items-center p-5 pb-7 gap-8 pt-20 xl:pt-7">
           <div className="flex items-center gap-1 xl:gap-2">
             <img src={mtnLogo} alt="logo" />
-            <span className="text-[18px] sm:text-lg xl:text-3xl font-semibold text-base-content dark:text-neutral-200">
-              MTN Academy
-            </span>
+            <span className="text-[18px] sm:text-lg xl:text-3xl font-semibold text-base-content dark:text-neutral-200"></span>
           </div>
           <span className="xl:text-xl font-semibold">
             Hello, 👋 Welcome Back!

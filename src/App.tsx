@@ -25,6 +25,7 @@ import Product from "./pages/Product";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./pages/Unauthorized";
+import Accounting from "./pages/Accounting";
 
 function App() {
   const Layout = () => {
@@ -157,6 +158,14 @@ function App() {
           element: (
             <ProtectedRoute requiredModule="log" requiredAction="read">
               <Logs />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/accounting",
+          element: (
+            <ProtectedRoute requiredModule="log" requiredAction="read">
+              <Accounting />
             </ProtectedRoute>
           ),
         },
