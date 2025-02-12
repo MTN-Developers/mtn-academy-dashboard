@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import ChangeThemes from "../components/ChangesThemes";
 import Loader from "../components/Loader";
 import mtnLogo from "../../public/images/mtn-logo.svg";
@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   // ✅ Correct placement for conditional rendering
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div className="w-full p-0 m-0">
