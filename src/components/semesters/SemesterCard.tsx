@@ -14,9 +14,9 @@ const SemesterCard = ({
   description_ar,
 }: ISemesterProps) => {
   return (
-    <div className="card bg-base-100 w-96 shadow-xl">
-      <figure>
-        <img src={image_url_ar} alt={name_ar} />
+    <div className="card bg-base-100 w-auto shadow-xl">
+      <figure className="h-[150px] bg-gray-200">
+        <img className="object-cover" src={image_url_ar} alt={name_ar} />
       </figure>
       <div className="card-body">
         <h2 className="card-title">{name_ar}</h2>
