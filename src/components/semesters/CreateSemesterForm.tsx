@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 /** 1) Define the Zod schema and TS type */
 const createSemesterSchema = z.object({
@@ -14,8 +15,19 @@ const createSemesterSchema = z.object({
   slug: z.string().nonempty("Slug is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
   price: z.coerce.number().positive("Price must be a positive number"),
-  image_url_ar: z.any(),
-  image_url_en: z.any(),
+  image_url_ar: z
+    .any()
+    .refine(
+      (files) => files instanceof FileList && files.length > 0,
+      "Arabic image is required."
+    ),
+
+  image_url_en: z
+    .any()
+    .refine(
+      (files) => files instanceof FileList && files.length > 0,
+      "Arabic image is required."
+    ),
 });
 type CreateSemesterFormData = z.infer<typeof createSemesterSchema>;
 
@@ -33,6 +45,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
 
   const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
   const [serverError, setServerError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -70,6 +83,10 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
       });
 
       toast.success("Semester added successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["semesters"],
+      });
+
       onSuccess?.();
     } catch (error: any) {
       if (error?.response?.status === 409) {
