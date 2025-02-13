@@ -51,6 +51,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CreateSemesterFormData>({
     resolver: zodResolver(createSemesterSchema),
   });
@@ -88,6 +89,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
       });
 
       onSuccess?.();
+      reset();
     } catch (error: any) {
       if (error?.response?.status === 409) {
         // e.g. "Record already exists"
@@ -101,6 +103,12 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
     } finally {
       setIsSubmitting(false); // Set loading to false when submission ends
     }
+  };
+
+  // 3) A helper to clear fields on Cancel
+  const handleCancel = () => {
+    reset(); // reset all fields
+    onCancel?.(); // then let parent know (so it can close the modal, etc.)
   };
 
   /** 5) Render the form (no <dialog> here) */
@@ -253,7 +261,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
         <button
           type="button"
           className="btn"
-          onClick={onCancel}
+          onClick={handleCancel}
           disabled={isSubmitting} // Optionally disable cancel while submitting
         >
           Cancel
