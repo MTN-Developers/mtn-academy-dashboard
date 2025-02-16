@@ -62,6 +62,7 @@ const SemestersPage = () => {
       <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-6 justify-items-center">
         {allSemesters?.map((semester) => (
           <SemesterCard
+            semester={semester}
             key={semester.id}
             created_at={semester.created_at}
             description_ar={semester.description_ar}
