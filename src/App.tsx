@@ -25,6 +25,8 @@ import Product from "./pages/Product";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./pages/Unauthorized";
+import SemestersPage from "./pages/semesters/SemestersPage";
+import CoursesPage from "./pages/coursesPage/CoursesPage";
 
 function App() {
   const Layout = () => {
@@ -157,6 +159,22 @@ function App() {
           element: (
             <ProtectedRoute requiredModule="log" requiredAction="read">
               <Logs />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters",
+          element: (
+            <ProtectedRoute>
+              <SemestersPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters/:semesterId/courses",
+          element: (
+            <ProtectedRoute>
+              <CoursesPage />
             </ProtectedRoute>
           ),
         },

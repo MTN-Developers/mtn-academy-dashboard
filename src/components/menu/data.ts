@@ -12,6 +12,7 @@ import {
   HiOutlineDocumentText,
   HiOutlineArrowLeftOnRectangle,
 } from "react-icons/hi2";
+import { RiBookMarkedLine } from "react-icons/ri";
 
 export const menu = [
   {
@@ -26,12 +27,18 @@ export const menu = [
       },
       {
         isLink: true,
-        url: "/profile",
-        icon: HiOutlineUser,
-        label: "profile",
-        module: "user", // <--- define module
-        action: "read", // <--- define action
+        url: "/semesters",
+        icon: RiBookMarkedLine,
+        label: "Semesters",
       },
+      // {
+      //   isLink: true,
+      //   url: "/profile",
+      //   icon: HiOutlineUser,
+      //   label: "profile",
+      //   module: "user", // <--- define module
+      //   action: "read", // <--- define action
+      // },
     ],
   },
   {
@@ -113,16 +120,16 @@ export const menu = [
       },
     ],
   },
-  {
-    catalog: "miscellaneous",
-    listItems: [
-      {
-        isLink: true,
-        url: "/login",
-        icon: HiOutlineArrowLeftOnRectangle,
-        label: "log out",
-        // Typically no permission needed to see or to log out
-      },
-    ],
-  },
+  // {
+  //   catalog: "miscellaneous",
+  //   listItems: [
+  //     {
+  //       isLink: true,
+  //       url: "/login",
+  //       icon: HiOutlineArrowLeftOnRectangle,
+  //       label: "log out",
+  //       // Typically no permission needed to see or to log out
+  //     },
+  //   ],
+  // },
 ];

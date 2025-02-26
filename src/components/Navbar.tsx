@@ -9,7 +9,7 @@ import ChangeThemes from "./ChangesThemes";
 import { menu } from "./menu/data";
 import MenuItem from "./menu/MenuItem";
 import mtnLogo from "../../public/images/mtn-logo.svg";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 
 const Navbar = () => {

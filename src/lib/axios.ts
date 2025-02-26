@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthResponse } from "../types/auth";
 
 export const baseURL =
-  import.meta.env.VITE_BASE_URL || "https://api.mtnlive.mtninstitute.net/api";
+  import.meta.env.VITE_BASE_URL || "https://staging.api.mtninstitute.net/api";
 
 const axiosInstance = axios.create({
   baseURL,
