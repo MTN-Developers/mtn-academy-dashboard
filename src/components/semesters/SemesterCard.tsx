@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Semester } from "../../types/semesters";
 import EditSemesterForm from "./EditSemesterForm";
 
@@ -18,6 +19,7 @@ const SemesterCard = ({
   description_ar,
   semester,
 }: ISemesterProps) => {
+  const navigate = useNavigate();
   //handlers
   const handleOpenEditModal = () => {
     const dialog = document.getElementById(
@@ -32,6 +34,10 @@ const SemesterCard = ({
     ) as HTMLDialogElement | null;
     dialog?.close();
   };
+
+  const handleViewCourses = () => {
+    navigate(`/semesters/${semester.id}/courses`);
+  };
   return (
     <div className="card bg-base-100 w-auto shadow-xl">
       <figure className="h-[150px] bg-gray-200">
@@ -40,9 +46,12 @@ const SemesterCard = ({
       <div className="card-body">
         <h2 className="card-title">{name_ar}</h2>
         <p>{description_ar}</p>
-        <div className="card-actions justify-end">
-          <div className="card-actions justify-end">
-            <button className="btn btn-success" onClick={handleOpenEditModal}>
+        <div className="card-actions justify-end ">
+          <div className="card-actions justify-end w-full">
+            <button
+              className="btn btn-success w-full"
+              onClick={handleOpenEditModal}
+            >
               Edit Semester
             </button>
           </div>
@@ -59,7 +68,12 @@ const SemesterCard = ({
             </div>
           </dialog>
 
-          <button className="btn btn-primary">See Related Courses</button>
+          <button
+            className="btn btn-primary w-full"
+            onClick={handleViewCourses}
+          >
+            See Related Courses
+          </button>
         </div>
       </div>
     </div>

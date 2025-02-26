@@ -1,4 +1,3 @@
-import React from "react";
 import useGetAllSemesters from "../../hooks/useGetAllSemesters";
 import Loader from "../../components/Loader";
 import SemesterCard from "../../components/semesters/SemesterCard";

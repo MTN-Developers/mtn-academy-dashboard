@@ -5,46 +5,53 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
 /** 1) Define the Zod schema and TS type */
-const createSemesterSchema = z.object({
+const createCourseSchema = z.object({
   name_ar: z.string().nonempty("Arabic name is required"),
   name_en: z.string().nonempty("English name is required"),
   description_ar: z.string().nonempty("Arabic description is required"),
   description_en: z.string().nonempty("English description is required"),
+  // calender: z.string().date().nonempty("date is required"),
+  // category: z.string().nonempty("category is required"),
   slug: z.string().nonempty("Slug is required"),
-  promotion_video_url: z.string().nonempty("Promotion video URL is required"),
-  price: z.coerce.number().positive("Price must be a positive number"),
-  price_after_discount: z.coerce
-    .number()
-    .positive("Price must be a positive number"),
-  image_url_ar: z
+  // semester_id: z.string().nonempty("semester_id is required"),
+  //   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
+  //   price: z.coerce.number().positive("Price must be a positive number"),
+  logo_ar: z
     .any()
     .refine(
       (files) => files instanceof FileList && files.length > 0,
       "Arabic image is required."
     ),
 
-  image_url_en: z
+  logo_en: z
     .any()
     .refine(
       (files) => files instanceof FileList && files.length > 0,
       "Arabic image is required."
     ),
 });
-type CreateSemesterFormData = z.infer<typeof createSemesterSchema>;
+type CreateCourseFormData = z.infer<typeof createCourseSchema>;
 
 /** 2) Props to handle success or closing a modal, if desired */
-interface CreateSemesterFormProps {
+interface CreateCourseFormProps {
+  newIndex: number; // optional index to pass to the form
   onSuccess?: () => void; // optional callback if parent wants to do something on success
   onCancel?: () => void; // optional callback if parent wants to do something on cancel
 }
 
-const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
+const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
+  newIndex,
   onSuccess,
   onCancel,
 }) => {
   /** 3) Set up React Hook Form */
+  const { semesterId } = useParams();
+  // console.log("newIndex from internal ", newIndex);
+
+  // console.log("semester id from internal ", semesterId);
 
   const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
   const [serverError, setServerError] = useState<string | null>(null);
@@ -55,12 +62,12 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CreateSemesterFormData>({
-    resolver: zodResolver(createSemesterSchema),
+  } = useForm<CreateCourseFormData>({
+    resolver: zodResolver(createCourseSchema),
   });
 
   /** 4) Submit handler */
-  const onSubmit = async (data: CreateSemesterFormData) => {
+  const onSubmit = async (data: CreateCourseFormData) => {
     setIsSubmitting(true); // Set loading to true when submission starts
     try {
       setServerError(null); // Reset any previous error
@@ -71,28 +78,26 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
       formData.append("description_ar", data.description_ar);
       formData.append("description_en", data.description_en);
       formData.append("slug", data.slug);
-      formData.append("promotion_video_url", data.promotion_video_url);
-      formData.append("price", String(data.price));
-      formData.append(
-        "price_after_discount",
-        String(data.price_after_discount)
-      );
+      formData.append("semester_id", String(semesterId));
+      formData.append("index", String(newIndex));
+      // formData.append("promotion_video_url", data.promotion_video_url);
+      //   formData.append("price", String(data.price));
 
-      if (data.image_url_ar?.[0]) {
-        formData.append("image_url_ar", data.image_url_ar[0]);
+      if (data.logo_ar?.[0]) {
+        formData.append("logo_ar", data.logo_ar[0]);
       }
-      if (data.image_url_en?.[0]) {
-        formData.append("image_url_en", data.image_url_en[0]);
+      if (data.logo_en?.[0]) {
+        formData.append("logo_en", data.logo_en[0]);
       }
 
       // Make POST request
-      await axiosInstance.post("/semesters", formData, {
+      await axiosInstance.post("/course", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success("Semester added successfully");
       queryClient.invalidateQueries({
-        queryKey: ["semesters"],
+        queryKey: ["courses"],
       });
 
       onSuccess?.();
@@ -193,7 +198,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
       </div>
 
       {/* Promotion Video URL */}
-      <div>
+      {/* <div>
         <label className="block mb-1">Promotion Video URL</label>
         <input
           type="text"
@@ -205,10 +210,10 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
             {errors.promotion_video_url.message}
           </p>
         )}
-      </div>
+      </div> */}
 
       {/* Price */}
-      <div>
+      {/* <div>
         <label className="block mb-1">Price</label>
         <input
           type="number"
@@ -219,23 +224,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
         {errors.price && (
           <p className="text-red-500 text-sm">{errors.price.message}</p>
         )}
-      </div>
-
-      {/* Price after discount*/}
-      <div>
-        <label className="block mb-1">Price after discount</label>
-        <input
-          type="number"
-          step="0.01"
-          className="input input-bordered w-full"
-          {...register("price_after_discount")}
-        />
-        {errors.price_after_discount && (
-          <p className="text-red-500 text-sm">
-            {errors.price_after_discount.message}
-          </p>
-        )}
-      </div>
+      </div> */}
 
       {/* Image (Arabic) */}
       <div>
@@ -244,7 +233,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("image_url_ar")}
+          {...register("logo_ar")}
         />
       </div>
 
@@ -255,7 +244,7 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("image_url_en")}
+          {...register("logo_en")}
         />
       </div>
 
@@ -294,4 +283,4 @@ const CreateSemesterForm: React.FC<CreateSemesterFormProps> = ({
   );
 };
 
-export default CreateSemesterForm;
+export default CreateCourseForm;
