@@ -51,6 +51,8 @@ const EditSemesterForm: React.FC<EditSemesterFormProps> = ({
       slug: semester.slug,
       promotion_video_url: semester.promotion_video_url,
       price: semester.price,
+      // image_url_ar: semester.image_url_ar,
+      // image_url_en: semester.image_url_en,
     },
   });
 

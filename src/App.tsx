@@ -85,7 +85,7 @@ function App() {
         {
           path: "/users",
           element: (
-            <ProtectedRoute requiredModule="user" requiredAction="read">
+            <ProtectedRoute>
               <Users />
             </ProtectedRoute>
           ),

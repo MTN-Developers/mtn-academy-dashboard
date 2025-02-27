@@ -21,6 +21,7 @@ export interface Course {
   deleted_at: string | null;
   semester_id: string;
   index: number;
+  promotion_video_url: string | null;
 }
 
 export interface CourseResponse {

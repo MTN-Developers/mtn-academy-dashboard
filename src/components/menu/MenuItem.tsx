@@ -20,6 +20,16 @@ interface MenuItemProps {
   listItems: MenuItem[];
 }
 
+export interface MenuItemType {
+  isLink: boolean;
+  url?: string;
+  icon: IconType;
+  label: string;
+  module?: string;
+  action?: "create" | "read" | "update" | "delete";
+  onClick?: () => void;
+}
+
 const MenuItem: React.FC<MenuItemProps> = ({ onClick, catalog, listItems }) => {
   // 🔑 Use your AuthContext to check permissions
   const { hasPermission } = useAuth();

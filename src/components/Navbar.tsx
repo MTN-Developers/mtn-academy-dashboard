@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { DiReact } from "react-icons/di";
+// import { DiReact } from "react-icons/di";
 // import { HiSearch, HiOutlineBell } from "react-icons/hi";
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
 import ChangeThemes from "./ChangesThemes";
@@ -10,7 +10,8 @@ import { menu } from "./menu/data";
 import MenuItem from "./menu/MenuItem";
 import mtnLogo from "../../public/images/mtn-logo.svg";
 import { useAuth } from "../contexts/AuthContext";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
+import { MenuItemType } from "./menu/MenuItem";
 
 const Navbar = () => {
   const [isFullScreen, setIsFullScreen] = React.useState(true);
@@ -83,7 +84,7 @@ const Navbar = () => {
                   onClick={toggleDrawer}
                   key={index}
                   catalog={item.catalog}
-                  listItems={item.listItems}
+                  listItems={item.listItems as MenuItemType[]}
                 />
               ))}
             </div>
@@ -92,7 +93,7 @@ const Navbar = () => {
 
         {/* navbar logo */}
         <Link to={"/"} className="flex items-center gap-1 xl:gap-2">
-          <img src={mtnLogo} />
+          <img alt="image" src={mtnLogo} />
           {/* <DiReact className="text-3xl sm:text-4xl xl:text-4xl 2xl:text-6xl text-primary animate-spin-slow" /> */}
           <span className="text-[16px] leading-[1.2] sm:text-lg xl:text-xl 2xl:text-2xl font-semibold text-base-content dark:text-neutral-200">
             MTN Academy
@@ -114,6 +115,7 @@ const Navbar = () => {
           <HiSearch className="text-xl 2xl:text-2xl 3xl:text-3xl" />
         </button> */}
         <a
+          rel="noopener"
           href="https://romamph.com/"
           target="_blank"
           className="badge badge-neutral cursor-pointer hidden lg:block"

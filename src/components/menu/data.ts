@@ -1,7 +1,7 @@
 // data.ts (or wherever your menu data is defined)
 import {
   HiOutlineHome,
-  HiOutlineUser,
+  // HiOutlineUser,
   HiOutlineUsers,
   HiOutlineCube,
   HiOutlineClipboardDocumentList,
@@ -10,7 +10,7 @@ import {
   HiOutlineCalendarDays,
   HiOutlinePresentationChartBar,
   HiOutlineDocumentText,
-  HiOutlineArrowLeftOnRectangle,
+  // HiOutlineArrowLeftOnRectangle,
 } from "react-icons/hi2";
 import { RiBookMarkedLine } from "react-icons/ri";
 
@@ -30,6 +30,12 @@ export const menu = [
         url: "/semesters",
         icon: RiBookMarkedLine,
         label: "Semesters",
+      },
+      {
+        isLink: true,
+        url: "/users",
+        icon: HiOutlineUsers,
+        label: "Users",
       },
       // {
       //   isLink: true,

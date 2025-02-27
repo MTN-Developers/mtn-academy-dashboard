@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
 import ChangeThemes from "../components/ChangesThemes";
-import Loader from "../components/Loader";
+// import Loader from "../components/Loader";
 import mtnLogo from "../../public/images/mtn-logo.svg";
 
 const Login = () => {
