@@ -60,6 +60,8 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
         { is_locked: !selectedCourseToToggle.is_locked }
       );
 
+      console.log("Course lock status updated successfully:", response.data);
+
       toast.success(
         `Course ${
           !selectedCourseToToggle.is_locked ? "locked" : "unlocked"
