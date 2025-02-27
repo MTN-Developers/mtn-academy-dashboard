@@ -1,9 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
+import axiosInstance from "../lib/axios";
 
 // GET TOP DEALS
 export const fetchTopDeals = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/topdeals')
+    .get("https://react-admin-ui-v1-api.vercel.app/topdeals")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -19,7 +20,7 @@ export const fetchTopDeals = async () => {
 // GET TOTAL USERS
 export const fetchTotalUsers = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalusers')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalusers")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -35,7 +36,7 @@ export const fetchTotalUsers = async () => {
 // GET TOTAL PRODUCTS
 export const fetchTotalProducts = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalproducts')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalproducts")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -51,7 +52,7 @@ export const fetchTotalProducts = async () => {
 // GET TOTAL RATIO
 export const fetchTotalRatio = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalratio')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalratio")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -67,7 +68,7 @@ export const fetchTotalRatio = async () => {
 // GET TOTAL REVENUE
 export const fetchTotalRevenue = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalrevenue')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalrevenue")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -83,7 +84,7 @@ export const fetchTotalRevenue = async () => {
 // GET TOTAL SOURCE
 export const fetchTotalSource = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalsource')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalsource")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -99,7 +100,7 @@ export const fetchTotalSource = async () => {
 // GET TOTAL VISIT
 export const fetchTotalVisit = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalvisit')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalvisit")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -115,9 +116,7 @@ export const fetchTotalVisit = async () => {
 // GET TOTAL REVENUE BY PRODUCTS
 export const fetchTotalRevenueByProducts = async () => {
   const response = await axios
-    .get(
-      'https://react-admin-ui-v1-api.vercel.app/totalrevenue-by-product'
-    )
+    .get("https://react-admin-ui-v1-api.vercel.app/totalrevenue-by-product")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -133,7 +132,7 @@ export const fetchTotalRevenueByProducts = async () => {
 // GET TOTAL PROFIT
 export const fetchTotalProfit = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/totalprofit')
+    .get("https://react-admin-ui-v1-api.vercel.app/totalprofit")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -148,8 +147,8 @@ export const fetchTotalProfit = async () => {
 
 // GET ALL USERS
 export const fetchUsers = async () => {
-  const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/users')
+  const response = await axiosInstance
+    .get("/user?limit=50000")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -181,7 +180,7 @@ export const fetchSingleUser = async (id: string) => {
 // GET ALL PRODUCTS
 export const fetchProducts = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/products')
+    .get("https://react-admin-ui-v1-api.vercel.app/products")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -213,7 +212,7 @@ export const fetchSingleProduct = async (id: string) => {
 // GET ALL ORDERS
 export const fetchOrders = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/orders')
+    .get("https://react-admin-ui-v1-api.vercel.app/orders")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
@@ -229,7 +228,7 @@ export const fetchOrders = async () => {
 // GET ALL POSTS
 export const fetchPosts = async () => {
   const response = await axios
-    .get('https://react-admin-ui-v1-api.vercel.app/posts')
+    .get("https://react-admin-ui-v1-api.vercel.app/posts")
     .then((res) => {
       // console.log('axios get:', res.data);
       return res.data;
