@@ -1,3 +1,5 @@
+import { Semester } from "./semesters";
+
 // types/courses.ts
 export interface Course {
   id: string;
@@ -22,6 +24,9 @@ export interface Course {
   semester_id: string;
   index: number;
   promotion_video_url: string | null;
+  semester?: Semester;
+  is_locked?: boolean;
+  is_completed: boolean;
 }
 
 export interface CourseResponse {
