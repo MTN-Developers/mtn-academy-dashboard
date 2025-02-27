@@ -113,12 +113,12 @@ const Users = () => {
                   </span>
                 )}
               </div>
-              <button
+              {/* <button
                 onClick={() => setIsOpen(true)}
                 className={`btn ${isLoading ? "btn-disabled" : "btn-primary"}`}
               >
                 Add New User +
-              </button>
+              </button> */}
             </div>
             {isLoading ? (
               <DataTable
