@@ -1,3 +1,4 @@
+// components/semesters/EditSemesterForm.tsx
 import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -5,55 +6,34 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Course } from "../../types/courses";
 
-/** 1) Define the Zod schema and TS type */
-const createCourseSchema = z.object({
+const editCourseSchema = z.object({
   name_ar: z.string().nonempty("Arabic name is required"),
   name_en: z.string().nonempty("English name is required"),
   description_ar: z.string().nonempty("Arabic description is required"),
   description_en: z.string().nonempty("English description is required"),
-  // calender: z.string().date().nonempty("date is required"),
-  // category: z.string().nonempty("category is required"),
   slug: z.string().nonempty("Slug is required"),
-  // semester_id: z.string().nonempty("semester_id is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
-  //   price: z.coerce.number().positive("Price must be a positive number"),
-  logo_ar: z
-    .any()
-    .refine(
-      (files) => files instanceof FileList && files.length > 0,
-      "Arabic image is required."
-    ),
-
-  logo_en: z
-    .any()
-    .refine(
-      (files) => files instanceof FileList && files.length > 0,
-      "Arabic image is required."
-    ),
+  price: z.coerce.number().positive("Price must be a positive number"),
+  logo_ar: z.any(),
+  logo_en: z.any(),
 });
-type CreateCourseFormData = z.infer<typeof createCourseSchema>;
 
-/** 2) Props to handle success or closing a modal, if desired */
-interface CreateCourseFormProps {
-  newIndex: number; // optional index to pass to the form
-  onSuccess?: () => void; // optional callback if parent wants to do something on success
-  onCancel?: () => void; // optional callback if parent wants to do something on cancel
+type EditSemesterFormData = z.infer<typeof editCourseSchema>;
+
+interface EditSemesterFormProps {
+  course: Course;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
-  newIndex,
+const EditCourseForm: React.FC<EditSemesterFormProps> = ({
+  course,
   onSuccess,
   onCancel,
 }) => {
-  /** 3) Set up React Hook Form */
-  const { semesterId } = useParams();
-  // console.log("newIndex from internal ", newIndex);
-
-  // console.log("semester id from internal ", semesterId);
-
-  const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -61,16 +41,25 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-  } = useForm<CreateCourseFormData>({
-    resolver: zodResolver(createCourseSchema),
+  } = useForm<EditSemesterFormData>({
+    resolver: zodResolver(editCourseSchema),
+    defaultValues: {
+      name_ar: course.name_ar,
+      name_en: course.name_en,
+      description_ar: course.description_ar,
+      description_en: course.description_en,
+      slug: course.slug,
+      logo_ar: course.logo_ar,
+      logo_en: course.logo_en,
+      promotion_video_url: course.promotion_video_url || "",
+      //   price: course.price,
+    },
   });
 
-  /** 4) Submit handler */
-  const onSubmit = async (data: CreateCourseFormData) => {
-    setIsSubmitting(true); // Set loading to true when submission starts
+  const onSubmit = async (data: EditSemesterFormData) => {
+    setIsSubmitting(true);
     try {
-      setServerError(null); // Reset any previous error
+      setServerError(null);
 
       const formData = new FormData();
       formData.append("name_ar", data.name_ar);
@@ -78,8 +67,6 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
       formData.append("description_ar", data.description_ar);
       formData.append("description_en", data.description_en);
       formData.append("slug", data.slug);
-      formData.append("semester_id", String(semesterId));
-      formData.append("index", String(newIndex));
       formData.append("promotion_video_url", data.promotion_video_url);
       //   formData.append("price", String(data.price));
 
@@ -90,46 +77,38 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
         formData.append("logo_en", data.logo_en[0]);
       }
 
-      // Make POST request
-      await axiosInstance.post("/course", formData, {
+      // Make PATCH request
+      await axiosInstance.patch(`/course/${course.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Semester added successfully");
+      toast.success("Course updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["courses"],
+        queryKey: ["course"],
       });
 
       onSuccess?.();
-      reset();
     } catch (error: any) {
       if (error?.response?.status === 409) {
-        // e.g. "Record already exists"
         setServerError(error.response.data.message ?? "Conflict error");
       } else {
         setServerError("Something went wrong, please try again.");
       }
-
-      toast.error("Error adding semester");
-      console.error("Error creating semester:", error);
+      toast.error("Error updating course");
+      console.error("Error updating course:", error);
     } finally {
-      setIsSubmitting(false); // Set loading to false when submission ends
+      setIsSubmitting(false);
     }
   };
 
-  // 3) A helper to clear fields on Cancel
-  const handleCancel = () => {
-    reset(); // reset all fields
-    onCancel?.(); // then let parent know (so it can close the modal, etc.)
-  };
-
-  /** 5) Render the form (no <dialog> here) */
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
       className="space-y-4"
     >
+      {/* Form fields - same as CreateSemesterForm but with defaultValues */}
+      {/* ... copy all the form fields from CreateSemesterForm ... */}
       {/* Arabic Name */}
       <div>
         <label className="block mb-1">Arabic Name</label>
@@ -248,16 +227,13 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
         />
       </div>
 
-      {/* If there's a server error, display it above the Save button */}
       {serverError && <p className="text-red-600">{serverError}</p>}
 
-      {/* Form Buttons */}
       <div className="flex justify-end gap-2">
-        {/* Submit Button */}
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={isSubmitting} // Disable button while submitting
+          disabled={isSubmitting}
         >
           {isSubmitting ? (
             <>
@@ -265,16 +241,15 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
               Loading...
             </>
           ) : (
-            "Save"
+            "Update"
           )}
         </button>
 
-        {/* Cancel Button */}
         <button
           type="button"
           className="btn"
-          onClick={handleCancel}
-          disabled={isSubmitting} // Optionally disable cancel while submitting
+          onClick={onCancel}
+          disabled={isSubmitting}
         >
           Cancel
         </button>
@@ -283,4 +258,4 @@ const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
   );
 };
 
-export default CreateCourseForm;
+export default EditCourseForm;

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import useGetRelatedCourses from "../../hooks/useGetRelatedCourses";
 import Loader from "../../components/Loader";
 import CreateCourseForm from "../../components/courses/CreateCourseForm";
+import CourseCard from "../../components/courses/CourseCard";
 
 const CoursesPage = () => {
   const { semesterId } = useParams();
@@ -135,64 +136,7 @@ const CoursesPage = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {courses?.map((course) => (
-            <div
-              key={course.id}
-              className="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
-            >
-              {/* Card Image */}
-              <figure className="relative pt-[56.25%]">
-                {" "}
-                {/* 16:9 aspect ratio */}
-                <img
-                  src={course.logo_ar}
-                  alt={course.name_ar}
-                  className="absolute top-0 left-0 w-full h-full object-cover"
-                />
-              </figure>
-
-              {/* Card Content */}
-              <div className="card-body">
-                <div className="flex items-center justify-between">
-                  <h2 className="card-title text-lg">{course.name_ar}</h2>
-                  <div className="badge badge-primary">{course.index}</div>
-                </div>
-
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {course.description_ar}
-                </p>
-
-                {/* Course Details */}
-                <div className="mt-4 space-y-2">
-                  {course.course_duration && (
-                    <div className="flex items-center text-sm">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      <span>{course.course_duration}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Card Actions */}
-                <div className="card-actions justify-end mt-4">
-                  <button className="btn btn-primary btn-sm">
-                    See Details
-                  </button>
-                  {/* <button className="btn btn-outline btn-sm">Enroll Now</button> */}
-                </div>
-              </div>
-            </div>
+            <CourseCard course={course} />
           ))}
         </div>
       )}
