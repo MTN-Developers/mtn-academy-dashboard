@@ -1,0 +1,37 @@
+name: Deploy Vite React App - MTN Academy Dashboard
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Add SSH Known Hosts
+        run: ssh-keyscan -H ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+        env:
+          CI: true
+
+      - name: Build
+        run: bun run build
+
+      - name: Deploy to VM
+        run: |
+          rsync -avz --delete ./dist/ ${{ secrets.VM_USER }}@${{ secrets.VM_IP }}:/var/www/html/mtn-academy-dashboard
