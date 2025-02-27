@@ -68,6 +68,7 @@ const EditProfile = () => {
           {/* Photo */}
           <div className="relative inline-flex">
             <button
+              title="Edit profile picture"
               onClick={handleIconClick}
               className="btn btn-circle btn-sm xl:btn-md top-0 right-0 absolute z-[1]"
             >
@@ -86,6 +87,9 @@ const EditProfile = () => {
             </div>
           </div>
           <input
+            aria-label="Upload profile picture"
+            title="Choose a profile picture"
+            placeholder="Select an image file"
             type="file"
             ref={fileInputRef}
             className="hidden"
@@ -283,7 +287,12 @@ const EditProfile = () => {
             </div>
             {/* column 2 */}
             <div className="col-span-1 flex flex-col items-start gap-5">
-              <button className="btn btn-ghost text-error"></button>
+              <button
+                className="btn btn-ghost text-error"
+                title="Error action button"
+              >
+                <span className="sr-only">Error action</span>
+              </button>
               <button
                 onClick={() =>
                   toast("Gaboleh", {
@@ -294,7 +303,13 @@ const EditProfile = () => {
               >
                 Disconnect
               </button>
-              <button className="btn btn-ghost text-error"></button>
+              <button
+                className="btn btn-ghost text-error"
+                title="Error action"
+                aria-label="Error action button"
+              >
+                <span className="sr-only">Error action</span>
+              </button>
             </div>
           </div>
         </div>
