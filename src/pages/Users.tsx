@@ -31,7 +31,7 @@ const Users = () => {
             <div className="avatar">
               <div className="w-6 xl:w-9 rounded-full">
                 <img
-                  src={params.row.img || "/Portrait_Placeholder.png"}
+                  src={params.row.profile.avatar || "/Portrait_Placeholder.png"}
                   alt="user-picture"
                 />
               </div>
