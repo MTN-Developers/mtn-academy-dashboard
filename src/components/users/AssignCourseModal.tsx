@@ -9,18 +9,19 @@ import useGetRelatedCourses from "../../hooks/useGetRelatedCourses";
 import useGetUserCourses from "../../hooks/useGetUserCourses";
 import { AxiosError } from "axios";
 
+
 interface UserData {
-  id: string | number;
-  name: string;
-  email: string;
-  assignedCourses?: Course[];
-  [key: string]: any; // For other properties
+	id: string | number;
+	name: string;
+	email: string;
+	assignedCourses?: Course[];
+	[key: string]: any; // For other properties
 }
 
 interface AssignCourseModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  user: UserData;
+	isOpen: boolean;
+	onClose: () => void;
+	user: UserData;
 }
 
 interface ErrorResponse {
@@ -83,12 +84,13 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
     refetch: refetchUserCourses,
   } = useGetUserCourses(user.id);
 
-  // Fetch courses related to the selected semester
-  const {
-    data: coursesResponse,
-    isLoading: coursesLoading,
-    error: coursesError,
-  } = useGetRelatedCourses(selectedSemester);
+
+	// Fetch courses related to the selected semester
+	const {
+		data: coursesResponse,
+		isLoading: coursesLoading,
+		error: coursesError,
+	} = useGetRelatedCourses(selectedSemester);
 
   const courses = coursesResponse?.data || [];
   const userCourses = userCoursesResponse?.data || [];
@@ -97,18 +99,19 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
   const unlockedCourses = userCourses.filter((course) => !course.is_locked);
   const lockedCourses = userCourses.filter((course) => course.is_locked);
 
-  // Reset selected course when semester changes
-  useEffect(() => {
-    setSelectedCourse("");
-  }, [selectedSemester]);
 
-  if (error) {
-    console.log("Semester error:", error);
-  }
+	// Reset selected course when semester changes
+	useEffect(() => {
+		setSelectedCourse('');
+	}, [selectedSemester]);
 
-  if (coursesError) {
-    console.log("Courses error:", coursesError);
-  }
+	if (error) {
+		console.log('Semester error:', error);
+	}
+
+	if (coursesError) {
+		console.log('Courses error:', coursesError);
+	}
 
   if (userCoursesError) {
     console.log("User courses error:", userCoursesError);
@@ -118,23 +121,24 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
     setSelectedSemester(e.target.value);
   };
 
-  const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCourse(e.target.value);
-  };
 
-  const handleAssignSemester = async () => {
-    if (!selectedSemester) {
-      toast.error("Please select a semester first");
-      return;
-    }
+	const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedCourse(e.target.value);
+	};
 
-    setIsAssigningSemester(true);
-    try {
-      const response = await axiosInstance.post("/user-semester-progress/", {
-        user_id: user.id,
-        semester_id: selectedSemester,
-        is_locked: isSemesterLocked,
-      });
+	const handleAssignSemester = async () => {
+		if (!selectedSemester) {
+			toast.error('Please select a semester first');
+			return;
+		}
+
+		setIsAssigningSemester(true);
+		try {
+			const response = await axiosInstance.post('/user-semester-progress/', {
+				user_id: user.id,
+				semester_id: selectedSemester,
+				is_locked: isSemesterLocked,
+			});
 
       toast.success("Semester assigned successfully!");
       console.log("Semester assignment response:", response.data);
@@ -154,19 +158,20 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
     }
   };
 
-  const handleAssignCourse = async () => {
-    if (!selectedCourse) {
-      toast.error("Please select a course first");
-      return;
-    }
 
-    setIsAssigningCourse(true);
-    try {
-      const response = await axiosInstance.post("/user-course-progress", {
-        user_id: user.id,
-        course_id: selectedCourse,
-        is_locked: isCourseLocked,
-      });
+	const handleAssignCourse = async () => {
+		if (!selectedCourse) {
+			toast.error('Please select a course first');
+			return;
+		}
+
+		setIsAssigningCourse(true);
+		try {
+			const response = await axiosInstance.post('/user-course-progress', {
+				user_id: user.id,
+				course_id: selectedCourse,
+				is_locked: isCourseLocked,
+			});
 
       toast.success("Course assigned successfully!");
       console.log("Course assignment response:", response.data);
@@ -244,7 +249,8 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
     );
   };
 
-  if (!isOpen) return null;
+
+	if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -467,6 +473,7 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
       )}
     </div>
   );
+
 };
 
 export default AssignCourseModal;
