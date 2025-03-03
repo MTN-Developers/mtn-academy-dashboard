@@ -1,14 +1,18 @@
 // services/auth.ts
 import toast from "react-hot-toast";
-import axios from "../lib/axios";
+// import axios from "../lib/axios";
 import { AuthResponse, LoginCredentials } from "../types/auth";
 import { AxiosResponse } from "axios";
+import axiosInstance from "../lib/axios";
 
 export const authApi = {
   login: async (
     credentials: LoginCredentials
   ): Promise<AxiosResponse<AuthResponse>> => {
-    const response = await axios.post<AuthResponse>("/auth/login", credentials);
+    const response = await axiosInstance.post<AuthResponse>(
+      "/auth/login",
+      credentials
+    );
     // console.log("response from auth services ", response);
 
     return response;
@@ -19,7 +23,7 @@ export const authApi = {
   // },
 
   getCurrentUser: async () => {
-    const response = await axios.get<AuthResponse>("/auth/me"); // Make sure this endpoint is correct
+    const response = await axiosInstance.get<AuthResponse>("/auth/me"); // Make sure this endpoint is correct
     // console.log("Current User Response:", response.data); // Debug log
     return {
       user: response.data.data.user,
@@ -31,7 +35,7 @@ export const authApi = {
     refresh_token: string
   ): Promise<AxiosResponse<AuthResponse>> => {
     try {
-      const response = await axios.post<AuthResponse>("/auth/refresh", {
+      const response = await axiosInstance.post<AuthResponse>("/auth/refresh", {
         refresh_token,
       });
 
