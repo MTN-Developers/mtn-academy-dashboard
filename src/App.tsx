@@ -27,6 +27,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./pages/Unauthorized";
 import SemestersPage from "./pages/semesters/SemestersPage";
 import CoursesPage from "./pages/coursesPage/CoursesPage";
+import ChaptersPage from "./pages/ChaptersPage/ChaptersPage";
 
 function App() {
   const Layout = () => {
@@ -175,6 +176,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <CoursesPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters/:semesterId/courses/:courseSlug/chapters",
+          element: (
+            <ProtectedRoute>
+              <ChaptersPage />
             </ProtectedRoute>
           ),
         },

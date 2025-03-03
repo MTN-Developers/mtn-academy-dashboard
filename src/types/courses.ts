@@ -27,10 +27,42 @@ export interface Course {
   semester?: Semester;
   is_locked?: boolean;
   is_completed: boolean;
+  chapters: Chapter[] | [];
 }
 
 export interface CourseResponse {
   data: Course[];
   status: number;
   message: string;
+}
+
+export interface Chapter {
+  id: string;
+  title_ar: string;
+  title_en: string;
+  description_ar: string;
+  description_en: string;
+  type: string;
+  price: number | null;
+  course_id: string;
+  index: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  is_locked: boolean;
+  videos: Video[] | [];
+  course?: Course;
+}
+
+export interface Video {
+  id: string;
+  title_ar: string;
+  title_en: string;
+  duration: number;
+  video_url: string;
+  index: number;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  chapter?: Chapter;
 }
