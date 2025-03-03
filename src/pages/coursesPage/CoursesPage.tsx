@@ -26,7 +26,7 @@ const CoursesPage = () => {
     }
   }
 
-  console.log("Courses: ", courses);
+  // console.log("Courses: ", courses);
 
   if (isLoading) {
     return <Loader />;

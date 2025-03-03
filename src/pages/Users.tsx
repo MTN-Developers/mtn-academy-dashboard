@@ -13,7 +13,7 @@ const Users = () => {
     queryFn: fetchUsers,
   });
 
-  console.log("userrs", data?.data?.data);
+  // console.log("userrs", data?.data?.data);
 
   // Only access data.data.data if data exists
   const usersArray = data?.data?.data || [];
