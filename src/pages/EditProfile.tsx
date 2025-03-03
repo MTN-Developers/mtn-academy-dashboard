@@ -10,7 +10,7 @@ const EditProfile = () => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
-  // console.log("selected file: ", selectedFile);
+  console.log("selected file: ", selectedFile);
 
   const [preview, setPreview] = React.useState<string | null>(null);
 
