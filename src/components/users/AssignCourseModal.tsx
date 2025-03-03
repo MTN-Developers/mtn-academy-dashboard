@@ -59,7 +59,7 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
         { is_locked: !selectedCourseToToggle.is_locked }
       );
 
-      // console.log("Course lock status updated successfully:", response.data);
+      console.log("Course lock status updated successfully:", response.data);
 
       toast.success(
         `Course ${
@@ -139,7 +139,7 @@ const AssignCourseModal: React.FC<AssignCourseModalProps> = ({
       });
 
       toast.success("Semester assigned successfully!");
-      // console.log("Semester assignment response:", response.data);
+      console.log("Semester assignment response:", response.data);
       // Refetch user courses to update the list
       refetchUserCourses();
     } catch (error) {
