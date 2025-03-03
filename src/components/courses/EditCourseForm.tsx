@@ -15,7 +15,7 @@ const editCourseSchema = z.object({
   description_en: z.string().nonempty("English description is required"),
   slug: z.string().nonempty("Slug is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
-  price: z.coerce.number().positive("Price must be a positive number"),
+  // price: z.coerce.number().positive("Price must be a positive number"),
   logo_ar: z.any(),
   logo_en: z.any(),
 });
@@ -57,6 +57,8 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
   });
 
   const onSubmit = async (data: EditSemesterFormData) => {
+    // console.log("data", data);
+
     setIsSubmitting(true);
     try {
       setServerError(null);
@@ -78,7 +80,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       }
 
       // Make PATCH request
-      await axiosInstance.patch(`/course/${course.id}`, formData, {
+      await axiosInstance.put(`/course/${course.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
