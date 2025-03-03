@@ -2,7 +2,8 @@
 import axios from "axios";
 import { AuthResponse } from "../types/auth";
 
-export const baseURL = import.meta.env.VITE_BASE_URL;
+export const baseURL =
+  import.meta.env.VITE_BASE_URL || "https://api.academy.mtninstitute.net/api";
 
 // console.log("baseURL", baseURL);
 
