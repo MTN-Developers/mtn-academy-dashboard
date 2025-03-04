@@ -1,63 +1,51 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axiosInstance from "../../lib/axios";
+import { Chapter } from "../../types/courses";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../lib/axios";
 
-interface CreateChapterFormProps {
-  newIndex: number;
+interface EditChapterFormProps {
+  chapter: Chapter;
   onSuccess?: () => void;
   onCancel?: () => void;
-  courseId: string;
 }
 
-const createChapterSchema = z.object({
+const editChapterSchema = z.object({
   title_ar: z.string().nonempty("Arabic name is required"),
   title_en: z.string().nonempty("English name is required"),
-  index: z.number(),
-  type: z.string(),
-  course_id: z.string(),
 });
 
-type CreateChapterFormData = z.infer<typeof createChapterSchema>;
+type editChapterFormData = z.infer<typeof editChapterSchema>;
 
-const CreateChapterForm = ({
-  newIndex,
+const EditChapterForm = ({
+  chapter,
   onCancel,
   onSuccess,
-  courseId,
-}: CreateChapterFormProps) => {
+}: EditChapterFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
+
   const navigation = useNavigate();
 
   const {
     handleSubmit,
     register,
     reset,
-    setValue,
     formState: { errors },
-  } = useForm<CreateChapterFormData>({
-    resolver: zodResolver(createChapterSchema),
+  } = useForm<editChapterFormData>({
+    resolver: zodResolver(editChapterSchema),
     defaultValues: {
-      index: newIndex,
-      type: "lectures",
-      course_id: courseId,
+      title_ar: chapter.title_ar,
+      title_en: chapter.title_en,
     },
   });
 
-  // Set hidden field values
-  useState(() => {
-    setValue("index", newIndex);
-    setValue("type", "lectures");
-    setValue("course_id", courseId);
-  });
-
-  const onSubmit = async (data: CreateChapterFormData) => {
+  const onSubmit = async (data: editChapterFormData) => {
     console.log("Form data being submitted:", data);
     setIsSubmitting(true);
 
@@ -68,20 +56,17 @@ const CreateChapterForm = ({
       const formData = new FormData();
       formData.append("title_ar", data.title_ar);
       formData.append("title_en", data.title_en);
-      formData.append("course_id", data.course_id);
-      formData.append("index", String(data.index));
-      formData.append("type", data.type);
 
       console.log("Sending request to /chapter with data:", {
         title_ar: data.title_ar,
         title_en: data.title_en,
-        course_id: data.course_id,
-        index: data.index,
-        type: data.type,
       });
 
       // Make POST request
-      const response = await axiosInstance.post("/chapter", formData);
+      const response = await axiosInstance.patch(
+        `/chapter/${chapter.id}`,
+        formData
+      );
       console.log("API response:", response.data);
 
       toast.success("Chapter added successfully");
@@ -118,17 +103,12 @@ const CreateChapterForm = ({
     }
   };
 
-  const handleCancel = () => {
-    reset();
-    onCancel?.();
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       {/* Hidden fields */}
-      <input type="hidden" {...register("index", { valueAsNumber: true })} />
+      {/* <input type="hidden" {...register("index", { valueAsNumber: true })} />
       <input type="hidden" {...register("type")} />
-      <input type="hidden" {...register("course_id")} />
+      <input type="hidden" {...register("course_id")} /> */}
 
       {/* Arabic Name */}
       <div>
@@ -185,7 +165,7 @@ const CreateChapterForm = ({
         <button
           type="button"
           className="btn"
-          onClick={handleCancel}
+          onClick={onCancel}
           disabled={isSubmitting}
         >
           Cancel
@@ -195,4 +175,4 @@ const CreateChapterForm = ({
   );
 };
 
-export default CreateChapterForm;
+export default EditChapterForm;
