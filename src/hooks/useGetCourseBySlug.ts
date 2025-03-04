@@ -20,6 +20,8 @@ const useGetCourseBySlug = (courseSlug: string) => {
     queryKey: ["course-by-slug", courseSlug],
     queryFn: () => fetchCourseBySlug(courseSlug),
     enabled: !!courseSlug,
+    staleTime: 0, // Always consider data stale to ensure refetching
+    refetchOnWindowFocus: true, // Refetch when window regains focus
   });
 };
 

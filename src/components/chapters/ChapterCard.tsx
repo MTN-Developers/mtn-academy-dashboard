@@ -1,10 +1,31 @@
 import { Chapter } from "../../types/courses";
+import EditChapterForm from "./EditChapterForm";
 
 interface IProps {
   chapter: Chapter;
 }
 
 const ChapterCard = ({ chapter }: IProps) => {
+  //handlers
+  const handleOpenEditModal = () => {
+    const dialog = document.getElementById(
+      `edit_modal_${chapter.id}`
+    ) as HTMLDialogElement | null;
+    dialog?.showModal();
+  };
+
+  const handleCloseEditModal = () => {
+    const dialog = document.getElementById(
+      `edit_modal_${chapter.id}`
+    ) as HTMLDialogElement | null;
+    dialog?.close();
+  };
+
+  // const handleViewChapters = () => {
+  //   navigate(
+  //     `/semesters/${course.semester_id}/courses/${course.slug}/chapters`
+  //   );
+  // };
   return (
     <>
       <div
@@ -32,7 +53,7 @@ const ChapterCard = ({ chapter }: IProps) => {
             {chapter.description_ar}
           </p>
 
-          {/* Course Details */}
+          {/* chapter Details */}
           <div className="mt-4 space-y-2">
             {chapter.videos && (
               <div className="flex items-center text-sm">
@@ -58,20 +79,20 @@ const ChapterCard = ({ chapter }: IProps) => {
           {/* Card Actions */}
           <div className="card-actions justify-end mt-4">
             {/* Edit Dialog */}
-            {/* <dialog id={`edit_modal_${course.id}`} className="modal">
+            <dialog id={`edit_modal_${chapter.id}`} className="modal">
               <div className="modal-box">
                 <h3 className="font-bold text-lg">Edit Cousre</h3>
 
-                <EditCourseForm
-                  course={course}
+                <EditChapterForm
+                  chapter={chapter}
                   onSuccess={handleCloseEditModal}
                   onCancel={handleCloseEditModal}
                 />
               </div>
-            </dialog> */}
+            </dialog>
             {/* Add this button to open the edit modal */}
             <button
-              //   onClick={handleOpenEditModal}
+              onClick={handleOpenEditModal}
               className="btn btn-success btn-sm"
             >
               Edit
