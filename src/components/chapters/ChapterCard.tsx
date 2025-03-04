@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Chapter } from "../../types/courses";
 import EditChapterForm from "./EditChapterForm";
 
@@ -6,6 +7,8 @@ interface IProps {
 }
 
 const ChapterCard = ({ chapter }: IProps) => {
+  // console.log("url", window.location.pathname);
+
   //handlers
   const handleOpenEditModal = () => {
     const dialog = document.getElementById(
@@ -98,12 +101,13 @@ const ChapterCard = ({ chapter }: IProps) => {
               Edit
             </button>
 
-            <button
+            <Link
               //   onClick={handleViewChapters}
+              to={`${window.location.pathname}/${chapter.id}/videos`}
               className="btn btn-primary btn-sm"
             >
               See Vidoes
-            </button>
+            </Link>
             {/* <button className="btn btn-outline btn-sm">Enroll Now</button> */}
           </div>
         </div>

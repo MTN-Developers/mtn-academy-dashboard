@@ -105,7 +105,9 @@ const ChaptersPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {chapters &&
           chapters.length > 0 &&
-          chapters.map((chapter: Chapter) => <ChapterCard chapter={chapter} />)}
+          chapters.map((chapter: Chapter) => (
+            <ChapterCard key={chapter.id} chapter={chapter} />
+          ))}
       </div>
     </>
   );
