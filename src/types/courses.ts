@@ -65,4 +65,5 @@ export interface Video {
   updated_at: string;
   deleted_at: string | null;
   chapter?: Chapter;
+  has_task: boolean;
 }

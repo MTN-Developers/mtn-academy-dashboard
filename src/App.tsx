@@ -28,6 +28,7 @@ import Unauthorized from "./pages/Unauthorized";
 import SemestersPage from "./pages/semesters/SemestersPage";
 import CoursesPage from "./pages/coursesPage/CoursesPage";
 import ChaptersPage from "./pages/ChaptersPage/ChaptersPage";
+import VideosPage from "./pages/videosPage/VideosPage";
 
 function App() {
   const Layout = () => {
@@ -184,6 +185,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <ChaptersPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters/:semesterId/courses/:courseSlug/chapters/:chapterId/videos",
+          element: (
+            <ProtectedRoute>
+              <VideosPage />
             </ProtectedRoute>
           ),
         },
