@@ -55,7 +55,7 @@ const VideosPage = () => {
 
   const videos = currentChapter.videos || [];
 
-  console.log("vidos", videos);
+  //   console.log("vidos", videos);
 
   // Calculate the next index for a new video
   const nextVideoIndex =
