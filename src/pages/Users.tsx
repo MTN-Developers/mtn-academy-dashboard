@@ -42,6 +42,13 @@ const Users = () => {
       },
     },
     {
+      field: "id",
+      type: "string",
+      headerName: "Id",
+      minWidth: 200,
+      flex: 1,
+    },
+    {
       field: "email",
       type: "string",
       headerName: "Email",
