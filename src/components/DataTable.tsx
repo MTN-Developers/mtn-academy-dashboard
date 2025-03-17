@@ -109,13 +109,13 @@ const DataTable: React.FC<DataTableProps> = ({
         </select> */}
 
         {/* Bulk delete button */}
-        {/* <button
+        <button
           className="btn btn-danger"
           onClick={handleDeleteSelected}
           disabled={selectedRows.length === 0}
         >
           Delete Selected ({selectedRows.length})
-        </button> */}
+        </button>
       </div>
 
       <DataGrid
