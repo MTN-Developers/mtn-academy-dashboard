@@ -62,6 +62,13 @@ const Users = () => {
       minWidth: 120,
       flex: 1,
     },
+    {
+      field: "created_at",
+      type: "string",
+      headerName: "created at",
+      minWidth: 120,
+      flex: 1,
+    },
     // {
     //   field: "createdAt",
     //   headerName: "Created At",
