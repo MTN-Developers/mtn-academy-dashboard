@@ -66,29 +66,11 @@ const DataTable: React.FC<DataTableProps> = ({
       <div className="flex items-center">
         <button
           type="button"
-          title="View details"
-          onClick={() => navigate(`/${slug}/${params.row.id}`)}
-          className="btn btn-square btn-ghost"
-        >
-          <HiOutlineEye />
-        </button>
-        <button
-          type="button"
           title="Assign Course"
           onClick={() => handleAssignCourse(params.row as UserData)}
           className="btn btn-square btn-ghost"
         >
           <HiOutlinePencilSquare />
-        </button>
-        <button
-          type="button"
-          title="Delete item"
-          onClick={() => {
-            toast("Jangan dihapus!", { icon: "😠" });
-          }}
-          className="btn btn-square btn-ghost"
-        >
-          <HiOutlineTrash />
         </button>
       </div>
     ),
