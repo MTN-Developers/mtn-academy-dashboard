@@ -68,6 +68,14 @@ const Users = () => {
       headerName: "created at",
       minWidth: 120,
       flex: 1,
+      valueFormatter: (params) => {
+        // Check if the value exists
+        if (!params.value) return "";
+
+        // Convert the ISO string to a Date object and format it
+        const date = new Date(params.value);
+        return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD format
+      },
     },
     // {
     //   field: "createdAt",
