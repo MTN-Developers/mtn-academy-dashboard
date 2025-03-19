@@ -6,11 +6,11 @@ import {
   GridToolbar,
   GridRowSelectionModel,
 } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import {
   HiOutlinePencilSquare,
-  HiOutlineEye,
-  HiOutlineTrash,
+  // HiOutlineEye,
+  // HiOutlineTrash,
 } from "react-icons/hi2";
 import toast from "react-hot-toast";
 import AssignCourseModal from "./users/AssignCourseModal";
@@ -34,10 +34,10 @@ interface UserData {
 const DataTable: React.FC<DataTableProps> = ({
   columns,
   rows,
-  slug,
+  // slug,
   includeActionColumn,
 }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   // const [pageSize, setPageSize] = useState(10);
