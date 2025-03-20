@@ -50,7 +50,7 @@ const EventsPage = () => {
   const onSubmit = async (data: EventFormData) => {
     try {
       await axiosInstance.post("/events", data);
-      queryClient.invalidateQueries(["events"]);
+      queryClient.invalidateQueries({ queryKey: ["events"] });
       setIsModalOpen(false);
       reset();
     } catch (error) {
@@ -68,6 +68,11 @@ const EventsPage = () => {
       {
         accessorKey: "title_ar",
         header: "Arabic Title",
+        cell: (info) => info.getValue(),
+      },
+      {
+        accessorKey: "semester.name_ar",
+        header: "Semester",
         cell: (info) => info.getValue(),
       },
       {
