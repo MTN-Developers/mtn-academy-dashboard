@@ -12,6 +12,7 @@ import {
   HiOutlineDocumentText,
   // HiOutlineArrowLeftOnRectangle,
 } from "react-icons/hi2";
+import { MdEvent } from "react-icons/md";
 import { RiBookMarkedLine } from "react-icons/ri";
 
 export const menu = [
@@ -36,6 +37,12 @@ export const menu = [
         url: "/users",
         icon: HiOutlineUsers,
         label: "Users",
+      },
+      {
+        isLink: true,
+        url: "/events",
+        icon: MdEvent,
+        label: "Events",
       },
       // {
       //   isLink: true,

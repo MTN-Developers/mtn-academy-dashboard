@@ -29,6 +29,7 @@ import SemestersPage from "./pages/semesters/SemestersPage";
 import CoursesPage from "./pages/coursesPage/CoursesPage";
 import ChaptersPage from "./pages/ChaptersPage/ChaptersPage";
 import VideosPage from "./pages/videosPage/VideosPage";
+import EventsPage from "./pages/events/EventsPage";
 
 function App() {
   const Layout = () => {
@@ -79,7 +80,7 @@ function App() {
         {
           path: "/profile/edit",
           element: (
-            <ProtectedRoute requiredModule="user" requiredAction="update">
+            <ProtectedRoute requiredModule="user" requiredAction="read">
               <EditProfile />
             </ProtectedRoute>
           ),
@@ -89,6 +90,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <Users />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/events",
+          element: (
+            <ProtectedRoute>
+              <EventsPage />
             </ProtectedRoute>
           ),
         },
