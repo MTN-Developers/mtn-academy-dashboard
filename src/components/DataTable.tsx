@@ -11,7 +11,7 @@ import {
   RowSelectionState,
 } from "@tanstack/react-table";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import AssignCourseModal from "./users/AssignCourseModal";
 
 interface DataTableProps<TData> {
@@ -101,22 +101,22 @@ const DataTable = <TData extends { id: string }>({
     rowCount: meta?.total || 0,
   });
 
-  const handleDeleteSelected = () => {
-    const selectedIds = table
-      .getSelectedRowModel()
-      .rows.map((row) => row.original.id);
-    if (selectedIds.length === 0) {
-      toast("No items selected!", { icon: "⚠️" });
-      return;
-    }
-    onDeleteSelected?.(selectedIds);
-    setRowSelection({});
-  };
+  //   const handleDeleteSelected = () => {
+  //     const selectedIds = table
+  //       .getSelectedRowModel()
+  //       .rows.map((row) => row.original.id);
+  //     if (selectedIds.length === 0) {
+  //       toast("No items selected!", { icon: "⚠️" });
+  //       return;
+  //     }
+  //     onDeleteSelected?.(selectedIds);
+  //     setRowSelection({});
+  //   };
 
   return (
     <div className="w-full bg-base-100 text-base-content">
       <div className="flex justify-between items-center mb-2">
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           {onDeleteSelected && (
             <button
               className="btn btn-danger"
@@ -126,7 +126,7 @@ const DataTable = <TData extends { id: string }>({
               Delete Selected ({table.getSelectedRowModel().rows.length})
             </button>
           )}
-        </div>
+        </div> */}
 
         <input
           value={globalFilter}
