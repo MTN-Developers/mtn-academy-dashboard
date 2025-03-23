@@ -29,6 +29,10 @@ const CourseCard = ({ course }: IProps) => {
     );
   };
 
+  const handleOpenMaterials = () => {
+    navigate(`/semesters/${course.semester_id}/courses/${course.id}/materials`);
+  };
+
   return (
     <>
       <div
@@ -95,6 +99,13 @@ const CourseCard = ({ course }: IProps) => {
               </div>
             </dialog>
             {/* Add this button to open the edit modal */}
+            <button
+              onClick={handleOpenMaterials}
+              className="btn btn-active btn-info btn-sm"
+            >
+              Materials
+            </button>
+
             <button
               onClick={handleOpenEditModal}
               className="btn btn-success btn-sm"
