@@ -1,23 +1,23 @@
-import React from 'react';
-import { GridColDef } from '@mui/x-data-grid';
-import DataTable from '../components/DataTable';
-import { useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import React from "react";
+import { GridColDef } from "@mui/x-data-grid";
+import DataTable from "../components/oldDataTable";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 // import AddData from '../components/AddData';
-import { fetchOrders } from '../api/ApiCollection';
+import { fetchOrders } from "../api/ApiCollection";
 
 const Orders = () => {
   // const [isOpen, setIsOpen] = React.useState(false);
   const { isLoading, isError, isSuccess, data } = useQuery({
-    queryKey: ['allorders'],
+    queryKey: ["allorders"],
     queryFn: fetchOrders,
   });
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: "id", headerName: "ID", width: 90 },
     {
-      field: 'title',
-      headerName: 'Product',
+      field: "title",
+      headerName: "Product",
       minWidth: 300,
       flex: 1,
       renderCell: (params) => {
@@ -25,28 +25,26 @@ const Orders = () => {
           <div className="flex gap-3 items-center">
             <div className="w-6 xl:w-10 overflow-hidden flex justify-center items-center">
               <img
-                src={params.row.product || '/corrugated-box.jpg'}
+                src={params.row.product || "/corrugated-box.jpg"}
                 alt="orders-picture"
                 className="object-cover"
               />
             </div>
-            <span className="mb-0 pb-0 leading-none">
-              {params.row.title}
-            </span>
+            <span className="mb-0 pb-0 leading-none">{params.row.title}</span>
           </div>
         );
       },
     },
     {
-      field: 'address',
-      type: 'string',
-      headerName: 'Address',
+      field: "address",
+      type: "string",
+      headerName: "Address",
       minWidth: 320,
       flex: 1,
     },
     {
-      field: 'recipient',
-      headerName: 'Recipient',
+      field: "recipient",
+      headerName: "Recipient",
       minWidth: 250,
       flex: 1,
       renderCell: (params) => {
@@ -55,9 +53,7 @@ const Orders = () => {
             <div className="avatar">
               <div className="w-6 xl:w-9 rounded-full">
                 <img
-                  src={
-                    params.row.profile || '/Portrait_Placeholder.png'
-                  }
+                  src={params.row.profile || "/Portrait_Placeholder.png"}
                   alt="user-picture"
                 />
               </div>
@@ -70,26 +66,26 @@ const Orders = () => {
       },
     },
     {
-      field: 'date',
-      headerName: 'Date',
+      field: "date",
+      headerName: "Date",
       minWidth: 100,
-      type: 'string',
+      type: "string",
       flex: 1,
     },
     {
-      field: 'total',
-      headerName: 'Total',
+      field: "total",
+      headerName: "Total",
       minWidth: 100,
-      type: 'string',
+      type: "string",
       flex: 1,
     },
     {
-      field: 'status',
-      headerName: 'Status',
+      field: "status",
+      headerName: "Status",
       minWidth: 120,
       flex: 1,
       renderCell: (params) => {
-        if (params.row.status == 'Pending') {
+        if (params.row.status == "Pending") {
           return (
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-warning"></div>
@@ -98,7 +94,7 @@ const Orders = () => {
               </div>
             </div>
           );
-        } else if (params.row.status == 'Dispatch') {
+        } else if (params.row.status == "Dispatch") {
           return (
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-info"></div>
@@ -107,7 +103,7 @@ const Orders = () => {
               </div>
             </div>
           );
-        } else if (params.row.status == 'Cancelled') {
+        } else if (params.row.status == "Cancelled") {
           return (
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-error"></div>
@@ -116,7 +112,7 @@ const Orders = () => {
               </div>
             </div>
           );
-        } else if (params.row.status == 'Completed') {
+        } else if (params.row.status == "Completed") {
           return (
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-success"></div>
@@ -141,16 +137,16 @@ const Orders = () => {
 
   React.useEffect(() => {
     if (isLoading) {
-      toast.loading('Loading...', { id: 'promiseOrders' });
+      toast.loading("Loading...", { id: "promiseOrders" });
     }
     if (isError) {
-      toast.error('Error while getting the data!', {
-        id: 'promiseOrders',
+      toast.error("Error while getting the data!", {
+        id: "promiseOrders",
       });
     }
     if (isSuccess) {
-      toast.success('Got the data successfully!', {
-        id: 'promiseOrders',
+      toast.success("Got the data successfully!", {
+        id: "promiseOrders",
       });
     }
   }, [isError, isLoading, isSuccess]);

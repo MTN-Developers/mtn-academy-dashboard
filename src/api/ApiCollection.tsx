@@ -146,19 +146,24 @@ export const fetchTotalProfit = async () => {
 };
 
 // GET ALL USERS
-export const fetchUsers = async () => {
-  const response = await axiosInstance
-    .get("/user?limit=50000")
-    .then((res) => {
-      // console.log('axios get:', res.data);
-      return res.data;
-    })
-    .catch((err) => {
-      // console.log(err);
-      throw err;
-    });
 
-  return response;
+export const fetchUsers = async ({
+  page = 1,
+  limit = 10,
+  search = "",
+}): Promise<UserResponse> => {
+  try {
+    const response = await axiosInstance.get("/user", {
+      params: {
+        page,
+        limit,
+        search,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw new Error("Failed to fetch users");
+  }
 };
 
 // GET SINGLE USER
