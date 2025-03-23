@@ -30,6 +30,7 @@ import CoursesPage from "./pages/coursesPage/CoursesPage";
 import ChaptersPage from "./pages/ChaptersPage/ChaptersPage";
 import VideosPage from "./pages/videosPage/VideosPage";
 import EventsPage from "./pages/events/EventsPage";
+import MaterialsPage from "./pages/materialsPage/materialsPage";
 
 function App() {
   const Layout = () => {
@@ -194,6 +195,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <ChaptersPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters/:semesterId/courses/:courseId/materials",
+          element: (
+            <ProtectedRoute>
+              <MaterialsPage />
             </ProtectedRoute>
           ),
         },
