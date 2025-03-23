@@ -30,7 +30,7 @@ import CoursesPage from "./pages/coursesPage/CoursesPage";
 import ChaptersPage from "./pages/ChaptersPage/ChaptersPage";
 import VideosPage from "./pages/videosPage/VideosPage";
 import EventsPage from "./pages/events/EventsPage";
-import MaterialsPage from "./pages/materialsPage/materialsPage";
+import MaterialsPage from "./pages/materials/MaterialsPage";
 
 function App() {
   const Layout = () => {
