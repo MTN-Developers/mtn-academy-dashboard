@@ -1,21 +1,21 @@
-import React from 'react';
-import { GridColDef } from '@mui/x-data-grid';
-import DataTable from '../components/DataTable';
-import { useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { fetchLogs } from '../api/ApiCollection';
+import React from "react";
+import { GridColDef } from "@mui/x-data-grid";
+import DataTable from "../components/oldDataTable";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { fetchLogs } from "../api/ApiCollection";
 
 const Logs = () => {
   const { isLoading, isError, isSuccess, data } = useQuery({
-    queryKey: ['all-logs'],
+    queryKey: ["all-logs"],
     queryFn: fetchLogs,
   });
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 90 },
+    { field: "id", headerName: "ID", width: 90 },
     {
-      field: 'firstName',
-      headerName: 'Name',
+      field: "firstName",
+      headerName: "Name",
       minWidth: 220,
       flex: 1,
       renderCell: (params) => {
@@ -24,7 +24,7 @@ const Logs = () => {
             <div className="avatar">
               <div className="w-6 xl:w-9 rounded-full">
                 <img
-                  src={params.row.img || '/Portrait_Placeholder.png'}
+                  src={params.row.img || "/Portrait_Placeholder.png"}
                   alt="user-picture"
                 />
               </div>
@@ -37,44 +37,42 @@ const Logs = () => {
       },
     },
     {
-      field: 'role',
-      headerName: 'Role',
+      field: "role",
+      headerName: "Role",
       minWidth: 100,
-      type: 'string',
+      type: "string",
       flex: 1,
     },
     {
-      field: 'email',
-      type: 'string',
-      headerName: 'Email',
+      field: "email",
+      type: "string",
+      headerName: "Email",
       minWidth: 200,
       flex: 1,
     },
     {
-      field: 'date',
-      headerName: 'Date',
+      field: "date",
+      headerName: "Date",
       minWidth: 120,
-      type: 'string',
+      type: "string",
       flex: 1,
     },
     {
-      field: 'time',
-      headerName: 'Time',
+      field: "time",
+      headerName: "Time",
       minWidth: 100,
-      type: 'string',
+      type: "string",
       flex: 1,
     },
     {
-      field: 'action',
-      headerName: 'Action',
+      field: "action",
+      headerName: "Action",
       minWidth: 350,
-      type: 'string',
+      type: "string",
       flex: 1,
       renderCell: (params) => {
         return (
-          <div className="flex whitespace-normal">
-            {params.row.action}
-          </div>
+          <div className="flex whitespace-normal">{params.row.action}</div>
         );
       },
     },
@@ -82,16 +80,16 @@ const Logs = () => {
 
   React.useEffect(() => {
     if (isLoading) {
-      toast.loading('Loading...', { id: 'promiseLogs' });
+      toast.loading("Loading...", { id: "promiseLogs" });
     }
     if (isError) {
-      toast.error('Error while getting the data!', {
-        id: 'promiseLogs',
+      toast.error("Error while getting the data!", {
+        id: "promiseLogs",
       });
     }
     if (isSuccess) {
-      toast.success('Got the data successfully!', {
-        id: 'promiseLogs',
+      toast.success("Got the data successfully!", {
+        id: "promiseLogs",
       });
     }
   }, [isError, isLoading, isSuccess]);
