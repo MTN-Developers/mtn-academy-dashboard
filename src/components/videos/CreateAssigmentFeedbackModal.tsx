@@ -6,24 +6,28 @@ import { z } from "zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 
-interface CreateAssigmentFormProps {
-  videoId: string;
+interface CreateAssigmentFeedbackModalProps {
+  answerId: string;
+  questionId: string; // Add the parent questionId
+
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-const CreateAssigmentFormSchema = z.object({
-  video_id: z.string().nonempty("Video ID is required"),
-  question: z.string().nonempty("Question is required"),
+const CreateAssigmentFeedbackModalSchema = z.object({
+  feedback: z.string().nonempty("feedback ID is required"),
 });
 
-type CreateAssigmentFormData = z.infer<typeof CreateAssigmentFormSchema>;
+type CreateAssigmentFeedbackModalData = z.infer<
+  typeof CreateAssigmentFeedbackModalSchema
+>;
 
-const CreateAssigmentForm = ({
-  videoId,
+const CreateAssigmentFeedbackModal = ({
+  answerId,
+  questionId, // Add the parent questionId
   onSuccess,
   onCancel,
-}: CreateAssigmentFormProps) => {
+}: CreateAssigmentFeedbackModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -33,23 +37,22 @@ const CreateAssigmentForm = ({
     register,
     reset,
     formState: { errors },
-  } = useForm<CreateAssigmentFormData>({
-    resolver: zodResolver(CreateAssigmentFormSchema),
+  } = useForm<CreateAssigmentFeedbackModalData>({
+    resolver: zodResolver(CreateAssigmentFeedbackModalSchema),
     defaultValues: {
-      video_id: videoId,
-      question: "",
+      feedback: "",
     },
   });
 
-  const onSubmit = async (data: CreateAssigmentFormData) => {
+  const onSubmit = async (data: CreateAssigmentFeedbackModalData) => {
     setIsSubmitting(true);
     setServerError(null);
 
     try {
-      await axiosInstance.post("/video-assignment/question", data);
+      await axiosInstance.patch(`/video-assignment/answer/${answerId}`, data);
       toast.success("Assignment created successfully!");
       queryClient.invalidateQueries({
-        queryKey: ["video-assignment", videoId],
+        queryKey: ["question", questionId],
       });
       reset();
       if (onSuccess) onSuccess();
@@ -68,18 +71,18 @@ const CreateAssigmentForm = ({
 
   return (
     <div>
-      <h1>CreateAssigmentForm</h1>
+      <h1>CreateAssigmentFeedbackModal</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
         {/* Question */}
         <div>
-          <label className="block mb-1">Question</label>
+          <label className="block mb-1">Feedback</label>
           <input
             type="text"
             className="input input-bordered w-full"
-            {...register("question")}
+            {...register("feedback")}
           />
-          {errors.question && (
-            <p className="text-red-500 text-sm">{errors.question.message}</p>
+          {errors.feedback && (
+            <p className="text-red-500 text-sm">{errors.feedback.message}</p>
           )}
         </div>
 
@@ -103,7 +106,7 @@ const CreateAssigmentForm = ({
                 Adding...
               </>
             ) : (
-              "Add Question"
+              "Add Feedback"
             )}
           </button>
 
@@ -121,4 +124,4 @@ const CreateAssigmentForm = ({
   );
 };
 
-export default CreateAssigmentForm;
+export default CreateAssigmentFeedbackModal;

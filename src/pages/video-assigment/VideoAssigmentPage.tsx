@@ -35,7 +35,7 @@ const VideoAssigmentPage = () => {
     cell: (info: CellContext<T>) => JSX.Element | string;
   }
 
-  interface CellContext<T> {
+  interface CellContext<_T> {
     getValue: () => any;
   }
 
@@ -91,14 +91,14 @@ const VideoAssigmentPage = () => {
 
   const handleOpenCreateModal = () => {
     const dialog = document.getElementById(
-      "create_video_modal"
+      "create_assigment_modal"
     ) as HTMLDialogElement | null;
     dialog?.showModal();
   };
 
   const handleCloseCreateModal = () => {
     const dialog = document.getElementById(
-      "create_video_modal"
+      "create_assigment_modal"
     ) as HTMLDialogElement | null;
     dialog?.close();
   };
@@ -166,7 +166,7 @@ const VideoAssigmentPage = () => {
           </div>
 
           {/* Create Video Modal */}
-          <dialog id="create_video_modal" className="modal">
+          <dialog id="create_assigment_modal" className="modal">
             <div className="modal-box">
               <h3 className="font-bold text-lg">Add New Assigment</h3>
               <CreateAssigmentForm

@@ -7,6 +7,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { UserAnswer } from "../../types/Assigments";
+import CreateAssigmentFeedbackModal from "../../components/videos/CreateAssigmentFeedbackModal";
+import { useState } from "react";
 
 const AssigmentAnswersPage = () => {
   const params = useParams();
@@ -19,9 +21,11 @@ const AssigmentAnswersPage = () => {
     questionId: params.questionId as string,
   });
 
+  const [answerId, setAnswerId] = useState<string | null>(null);
+
   console.log("answers is", answers);
 
-  interface CellContext<T> {
+  interface CellContext<_T> {
     getValue: () => any;
   }
 
@@ -43,12 +47,66 @@ const AssigmentAnswersPage = () => {
       },
     },
     {
+      accessorKey: "feedback",
+      header: "Feedback",
+      cell: (info: CellContext<UserAnswer>) => {
+        return (
+          <p
+            style={{
+              scrollbarWidth: "none",
+            }}
+            className="max-w-[300px] overflow-scroll"
+          >
+            {info.getValue()}
+          </p>
+        );
+      },
+    },
+    {
       accessorKey: "created_at",
       header: "Created At",
       cell: (info: CellContext<UserAnswer>) =>
         new Date(info.getValue()).toLocaleDateString(),
     },
+    {
+      // actions column
+      accessorKey: "id",
+      header: "Actions",
+      cell: (info: CellContext<UserAnswer>) => {
+        const openCreateModal = () => {
+          setAnswerId(info.getValue() as string);
+          handleOpenCreateModal();
+        };
+
+        return (
+          <>
+            <button
+              onClick={openCreateModal}
+              className="btn btn-sm btn-success"
+            >
+              add Feedback
+            </button>
+          </>
+        );
+      },
+    },
   ];
+
+  // ## handlers
+
+  const handleOpenCreateModal = () => {
+    const dialog = document.getElementById(
+      "create_feedback_modal"
+    ) as HTMLDialogElement | null;
+    dialog?.showModal();
+  };
+
+  const handleCloseCreateModal = () => {
+    const dialog = document.getElementById(
+      "create_feedback_modal"
+    ) as HTMLDialogElement | null;
+    dialog?.close();
+  };
 
   const table = useReactTable({
     data: answers ?? [],
@@ -113,6 +171,18 @@ const AssigmentAnswersPage = () => {
           </div>
         )}
       </div>
+      {/* Create feedback Modal */}
+      <dialog id="create_feedback_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Add New Assigment</h3>
+          <CreateAssigmentFeedbackModal
+            questionId={params.questionId as string}
+            answerId={answerId as string}
+            onSuccess={handleCloseCreateModal}
+            onCancel={handleCloseCreateModal}
+          />
+        </div>
+      </dialog>
     </div>
   );
 };

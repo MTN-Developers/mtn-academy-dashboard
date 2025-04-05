@@ -14,11 +14,12 @@ const useGetAnswersQuestionById = ({ questionId }: IProps) => {
       `/video-assignment/answer/${questionId}`
     );
     return response.data.data as UserAnswer[];
-  }, []);
+  }, [questionId]);
 
   return useQuery({
     queryKey: ["question", questionId],
     queryFn: () => fetchQuestionById(),
+    enabled: !!questionId,
   });
 };
 
