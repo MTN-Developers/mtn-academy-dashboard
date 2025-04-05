@@ -32,6 +32,7 @@ import VideosPage from "./pages/videosPage/VideosPage";
 import EventsPage from "./pages/events/EventsPage";
 import MaterialsPage from "./pages/materials/MaterialsPage";
 import VideoAssigmentPage from "./pages/video-assigment/VideoAssigmentPage";
+import AssigmentAnswersPage from "./pages/video-assigment/AssigmentAnswersPage";
 
 function App() {
   const Layout = () => {
@@ -220,6 +221,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <VideoAssigmentPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/semesters/:semesterId/courses/:courseSlug/chapters/:chapterId/videos/:videoId/assignments/answers/:questionId",
+          element: (
+            <ProtectedRoute>
+              <AssigmentAnswersPage />
             </ProtectedRoute>
           ),
         },

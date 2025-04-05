@@ -23,29 +23,52 @@ const VideoAssigmentPage = () => {
     videoId: params.videoId as string,
   });
 
-  const columns = [
+  interface Question {
+    question: string;
+    created_at: string;
+    id: string;
+  }
+
+  interface ColumnDef<T> {
+    accessorKey: keyof T;
+    header: string;
+    cell: (info: CellContext<T>) => JSX.Element | string;
+  }
+
+  interface CellContext<T> {
+    getValue: () => any;
+  }
+
+  const columns: ColumnDef<Question>[] = [
     {
       accessorKey: "question",
       header: "Question",
-      cell: (info: any) => info.getValue(),
+      cell: (info: CellContext<Question>) => info.getValue(),
     },
     {
       accessorKey: "created_at",
       header: "Created At",
-      cell: (info: any) => new Date(info.getValue()).toLocaleDateString(),
+      cell: (info: CellContext<Question>) =>
+        new Date(info.getValue()).toLocaleDateString(),
     },
     {
-      accessorKey: "Actions",
+      accessorKey: "id",
       header: "Actions",
-      cell: () => (
-        <>
-          <Link to={`/video-assignment/${params.videoId}/answers`}>
-            <button className="btn btn-sm btn-success">
-              See users answers
-            </button>
-          </Link>
-        </>
-      ),
+      cell: (info: CellContext<Question>) => {
+        const questionId = info.getValue();
+
+        return (
+          <>
+            <Link
+              to={`/semesters/${params.semesterId}/courses/${params.courseSlug}/chapters/${params.chapterId}/videos/${params.videoId}/assignments/answers/${questionId}`}
+            >
+              <button className="btn btn-sm btn-success">
+                See users answers
+              </button>
+            </Link>
+          </>
+        );
+      },
     },
   ];
 
