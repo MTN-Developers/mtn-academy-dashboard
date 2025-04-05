@@ -1,5 +1,5 @@
 // src/pages/VideosPage/VideosPage.tsx
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import useGetCourseBySlug from "../../hooks/useGetCourseBySlug";
 import Loader from "../../components/Loader";
@@ -177,6 +177,11 @@ const VideosPage = () => {
           >
             Edit
           </button>
+          <Link
+            to={`/semesters/${course.semester_id}/courses/${courseSlug}/chapters/${chapterId}/videos/${props.row.original.id}/assignments`}
+          >
+            <button className="btn btn-xs btn-primary">Assigmnets</button>
+          </Link>
           <button
             onClick={() => handleOpenDeleteModal(props.row.original)}
             className="btn btn-xs btn-error"
