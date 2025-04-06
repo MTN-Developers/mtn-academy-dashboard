@@ -73,8 +73,8 @@ const CreateVideoForm = ({
       console.log("Creating video with data:", data);
 
       // Make POST request
-      const response = await axiosInstance.post("/video", data);
-      console.log("API response:", response.data);
+      await axiosInstance.post("/video", data);
+      // console.log("API response:", response.data);
 
       toast.success("Video added successfully");
 
