@@ -147,9 +147,9 @@ const Navbar = () => {
         </button> */}
 
         {/* theme */}
-        <div className="px-0 xl:px-auto btn btn-circle btn-ghost xl:mr-1">
+        {/* <div className="px-0 xl:px-auto btn btn-circle btn-ghost xl:mr-1">
           <ChangeThemes />
-        </div>
+        </div> */}
 
         {/* avatar dropdown */}
         <div className="dropdown dropdown-end">
