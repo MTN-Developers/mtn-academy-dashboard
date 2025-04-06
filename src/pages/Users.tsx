@@ -62,7 +62,7 @@ const Users = () => {
     columnHelper.accessor("courses", {
       header: "has Courses",
       cell: ({ getValue }) => {
-        console.log("Courses", getValue());
+        // console.log("Courses", getValue());
         const courses = getValue() as string[];
         return (
           <>
