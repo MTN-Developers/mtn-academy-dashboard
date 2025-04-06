@@ -153,7 +153,7 @@ const VideoAssigmentPage = () => {
             ) : (
               <div className="text-center py-10">
                 <p className="text-gray-500">
-                  No videos available for this chapter.
+                  No Assigmnets available for this video.
                 </p>
                 <button
                   onClick={handleOpenCreateModal}
