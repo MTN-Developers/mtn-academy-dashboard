@@ -166,7 +166,7 @@ const AssigmentAnswersPage = () => {
         ) : (
           <div className="text-center py-10">
             <p className="text-gray-500">
-              No answers available for this chapter.
+              No answers available for this question.
             </p>
           </div>
         )}
