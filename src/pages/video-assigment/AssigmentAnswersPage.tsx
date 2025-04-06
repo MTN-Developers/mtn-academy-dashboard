@@ -23,7 +23,7 @@ const AssigmentAnswersPage = () => {
 
   const [answerId, setAnswerId] = useState<string | null>(null);
 
-  console.log("answers is", answers);
+  // console.log("answers is", answers);
 
   interface CellContext<_T> {
     getValue: () => any;
@@ -31,18 +31,52 @@ const AssigmentAnswersPage = () => {
 
   const columns: ColumnDef<UserAnswer>[] = [
     {
-      accessorKey: "answer",
-      header: "answer",
+      accessorKey: "user.name",
+      header: "User Name",
+      cell: (info: CellContext<UserAnswer>) => {
+        return <p>{info.getValue()}</p>;
+      },
+    },
+    {
+      accessorKey: "user.email",
+      header: "User Email",
+      cell: (info: CellContext<UserAnswer>) => {
+        return <p>{info.getValue()}</p>;
+      },
+    },
+
+    {
+      accessorKey: "question.question",
+      header: "Question",
       cell: (info: CellContext<UserAnswer>) => {
         return (
           <p
             style={{
               scrollbarWidth: "none",
             }}
-            className="max-w-[300px] overflow-scroll"
+            className="max-w-[200px] overflow-scroll"
           >
             {info.getValue()}
           </p>
+        );
+      },
+    },
+    {
+      accessorKey: "answer",
+      header: "answer",
+      cell: (info: CellContext<UserAnswer>) => {
+        return (
+          <div className="tooltip tooltip-bottom" data-tip={info.getValue()}>
+            <button
+              style={{
+                scrollbarWidth: "none",
+              }}
+              className="max-w-[300px] overflow-scroll"
+            >
+              {info.getValue().slice(0, 50) +
+                (info.getValue().length > 50 ? "..." : "")}
+            </button>
+          </div>
         );
       },
     },
@@ -51,14 +85,16 @@ const AssigmentAnswersPage = () => {
       header: "Feedback",
       cell: (info: CellContext<UserAnswer>) => {
         return (
-          <p
-            style={{
-              scrollbarWidth: "none",
-            }}
-            className="max-w-[300px] overflow-scroll"
-          >
-            {info.getValue()}
-          </p>
+          <div className="tooltip tooltip-bottom" data-tip={info.getValue()}>
+            <button
+              style={{
+                scrollbarWidth: "none",
+              }}
+              className="max-w-[300px] overflow-scroll"
+            >
+              {info.getValue()}
+            </button>
+          </div>
         );
       },
     },
@@ -131,7 +167,7 @@ const AssigmentAnswersPage = () => {
       <h1 className="text-xl font-bold">AssigmentAnswersPage</h1>
 
       {/* here should go tanstack table to show the anwers of the question */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto my-10">
         {answers && answers.length > 0 ? (
           <table className="table w-full">
             <thead>
