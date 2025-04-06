@@ -4,7 +4,7 @@ import { HiBars3CenterLeft } from "react-icons/hi2";
 // import { DiReact } from "react-icons/di";
 // import { HiSearch, HiOutlineBell } from "react-icons/hi";
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
-import ChangeThemes from "./ChangesThemes";
+// import ChangeThemes from "./ChangesThemes";
 // import toast from "react-hot-toast";
 import { menu } from "./menu/data";
 import MenuItem from "./menu/MenuItem";

@@ -1,78 +1,45 @@
-// src/pages/VideosPage/VideosPage.tsx
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import useGetPracticalExVideos from "../../hooks/useGetPracticalExVideos";
+// import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import useGetCourseBySlug from "../../hooks/useGetCourseBySlug";
-import Loader from "../../components/Loader";
-import { Video } from "../../types/courses";
+import { Video } from "../../types/practicalChapter";
+import axiosInstance from "../../lib/axios";
+import toast from "react-hot-toast";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "../../lib/axios";
-import toast from "react-hot-toast";
 import EditVideoForm from "../../components/videos/EditVideoForm";
 import CreateVideoForm from "../../components/videos/CreateVideoForm";
 
-const VideosPage = () => {
-  const { courseSlug, chapterId } = useParams();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+const PracticalExercisesPage = () => {
+  const { courseId } = useParams();
+  // const queryClient = useQueryClient();
   const [videoToEdit, setVideoToEdit] = useState<Video | null>(null);
   const [videoToDelete, setVideoToDelete] = useState<Video | null>(null);
 
-  const {
-    data: courseResponse,
-    isLoading,
-    error,
-  } = useGetCourseBySlug(courseSlug!);
+  const { data, isError, error, isLoading } = useGetPracticalExVideos({
+    courseId: courseId as string,
+  });
 
-  if (isLoading) {
-    return <Loader />;
-  }
+  const videos = data?.data?.[0]?.videos || [];
 
-  if (error) {
-    console.error(error);
-    return <div>There was an error fetching videos!</div>;
-  }
-
-  if (!courseResponse || !courseResponse.data) {
-    return <div>Course not found</div>;
-  }
-
-  const course = courseResponse.data;
-
-  // Find the current chapter
-  const currentChapter = course.chapters.find(
-    (chapter) => chapter.id === chapterId
-  );
-
-  if (!currentChapter) {
-    return <div>Chapter not found</div>;
-  }
-
-  const videos = currentChapter.videos || [];
-
-  //   console.log("vidos", videos);
-
-  // Calculate the next index for a new video
-  const nextVideoIndex =
-    videos.length > 0 ? Math.max(...videos.map((video) => video.index)) + 1 : 0;
+  //   console.log("Videos: ", videos);
 
   // Handle opening modals
   const handleOpenEditModal = (video: Video) => {
     setVideoToEdit(video);
     const dialog = document.getElementById(
-      "edit_video_modal"
+      "edit_practical_video_modal"
     ) as HTMLDialogElement | null;
     dialog?.showModal();
   };
 
   const handleCloseEditModal = () => {
     const dialog = document.getElementById(
-      "edit_video_modal"
+      "edit_practical_video_modal"
     ) as HTMLDialogElement | null;
     dialog?.close();
     setVideoToEdit(null);
@@ -96,14 +63,14 @@ const VideosPage = () => {
 
   const handleOpenCreateModal = () => {
     const dialog = document.getElementById(
-      "create_video_modal"
+      "create_practical_video_modal"
     ) as HTMLDialogElement | null;
     dialog?.showModal();
   };
 
   const handleCloseCreateModal = () => {
     const dialog = document.getElementById(
-      "create_video_modal"
+      "create_practical_video_modal"
     ) as HTMLDialogElement | null;
     dialog?.close();
   };
@@ -117,9 +84,9 @@ const VideosPage = () => {
       toast.success("Video deleted successfully");
 
       // Invalidate and refetch queries
-      queryClient.invalidateQueries({
-        queryKey: ["course-by-slug", courseSlug],
-      });
+      //   queryClient.invalidateQueries({
+      //     queryKey: ["course-by-slug", courseSlug],
+      //   });
 
       handleCloseDeleteModal();
     } catch (error) {
@@ -177,11 +144,7 @@ const VideosPage = () => {
           >
             Edit
           </button>
-          <Link
-            to={`/semesters/${course.semester_id}/courses/${courseSlug}/chapters/${chapterId}/videos/${props.row.original.id}/assignments`}
-          >
-            <button className="btn btn-xs btn-primary">Assigmnets</button>
-          </Link>
+
           <button
             onClick={() => handleOpenDeleteModal(props.row.original)}
             className="btn btn-xs btn-error"
@@ -199,79 +162,84 @@ const VideosPage = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  // Calculate the next index for a new video
+  const nextVideoIndex =
+    videos.length > 0 ? Math.max(...videos.map((video) => video.index)) + 1 : 0;
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) {
+    console.error(error);
+
+    return <div>Error</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
       {/* Header Section */}
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <div className="space-y-2 mb-4 md:mb-0">
-          <h1 className="text-3xl font-bold">Videos</h1>
-          <p className="text-gray-600">
-            Manage videos for chapter: {currentChapter.title_ar}
-          </p>
+          <p className="text-gray-600">Parctical Exercises:</p>
         </div>
         <div className="flex gap-2">
           <button onClick={handleOpenCreateModal} className="btn btn-primary">
             Add Video
           </button>
-          <button
-            onClick={() =>
-              navigate(
-                `/semesters/${course.semester_id}/courses/${courseSlug}/chapters`
-              )
-            }
-            className="btn btn-outline btn-primary"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Back to Chapters
-          </button>
         </div>
       </div>
 
-      {/* Videos Table */}
-      <div className="overflow-x-auto">
-        {videos.length > 0 ? (
-          <table className="table w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
+      {videos.length > 0 ? (
+        <>
+          {/* Videos Table */}
+          <div className="overflow-x-auto">
+            {videos.length > 0 ? (
+              <table className="table w-full">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <th key={header.id}>
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </th>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
+                </tbody>
+              </table>
+            ) : (
+              <div className="text-center py-10">
+                <p className="text-gray-500">
+                  No videos available for this chapter.
+                </p>
+                <button
+                  onClick={handleOpenCreateModal}
+                  className="btn btn-primary mt-4"
+                >
+                  Add your first video
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
           <div className="text-center py-10">
             <p className="text-gray-500">
               No videos available for this chapter.
@@ -283,35 +251,35 @@ const VideosPage = () => {
               Add your first video
             </button>
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       {/* Edit Video Modal */}
-      <dialog id="edit_video_modal" className="modal">
+      <dialog id="edit_practical_video_modal" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Edit Video</h3>
           {videoToEdit && (
             <EditVideoForm
               video={videoToEdit}
-              chapterId={chapterId!}
+              chapterId={data?.data?.[0]?.id!}
               onSuccess={handleCloseEditModal}
               onCancel={handleCloseEditModal}
-              courseId={course.id}
+              courseId={courseId!}
             />
           )}
         </div>
       </dialog>
 
       {/* Create Video Modal */}
-      <dialog id="create_video_modal" className="modal">
+      <dialog id="create_practical_video_modal" className="modal">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add New Video</h3>
           <CreateVideoForm
-            chapterId={chapterId!}
+            chapterId={data?.data?.[0]?.id!}
             nextIndex={nextVideoIndex}
             onSuccess={handleCloseCreateModal}
             onCancel={handleCloseCreateModal}
-            courseId={course.id}
+            courseId={courseId!}
           />
         </div>
       </dialog>
@@ -338,4 +306,4 @@ const VideosPage = () => {
   );
 };
 
-export default VideosPage;
+export default PracticalExercisesPage;

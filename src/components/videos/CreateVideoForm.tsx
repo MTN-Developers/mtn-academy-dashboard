@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 interface CreateVideoFormProps {
   chapterId: string;
   nextIndex: number;
+  courseId?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -30,6 +31,7 @@ const createVideoSchema = z.object({
 type CreateVideoFormData = z.infer<typeof createVideoSchema>;
 
 const CreateVideoForm = ({
+  courseId,
   chapterId,
   nextIndex,
   onSuccess,
@@ -66,7 +68,11 @@ const CreateVideoForm = ({
   }, [setValue, chapterId]);
 
   const onSubmit = async (data: CreateVideoFormData) => {
+    console.log("Form data before submission:", data);
     setIsSubmitting(true);
+
+    // start submitting the form
+
     try {
       setServerError(null);
 
@@ -78,10 +84,19 @@ const CreateVideoForm = ({
 
       toast.success("Video added successfully");
 
-      // Invalidate and refetch queries
-      queryClient.invalidateQueries({
-        queryKey: ["course-by-slug", courseSlug],
-      });
+      // For regular videos
+      if (courseSlug) {
+        queryClient.invalidateQueries({
+          queryKey: ["course-by-slug", courseSlug],
+        });
+      }
+
+      // For practical exercise videos
+      if (courseId) {
+        queryClient.invalidateQueries({
+          queryKey: ["practical-ex-videos", courseId],
+        });
+      }
 
       onSuccess?.();
       reset();

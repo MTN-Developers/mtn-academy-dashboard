@@ -33,6 +33,12 @@ const CourseCard = ({ course }: IProps) => {
     navigate(`/semesters/${course.semester_id}/courses/${course.id}/materials`);
   };
 
+  const handleOpenPracticleExercises = () => {
+    navigate(
+      `/semesters/${course.semester_id}/courses/${course.id}/parcticalExercises`
+    );
+  };
+
   return (
     <>
       <div
@@ -118,6 +124,12 @@ const CourseCard = ({ course }: IProps) => {
               className="btn btn-primary btn-sm"
             >
               See Chapters
+            </button>
+            <button
+              onClick={handleOpenPracticleExercises}
+              className="btn btn-success btn-sm"
+            >
+              Practical exercises
             </button>
             {/* <button className="btn btn-outline btn-sm">Enroll Now</button> */}
           </div>
