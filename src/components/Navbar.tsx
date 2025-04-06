@@ -4,7 +4,7 @@ import { HiBars3CenterLeft } from "react-icons/hi2";
 // import { DiReact } from "react-icons/di";
 // import { HiSearch, HiOutlineBell } from "react-icons/hi";
 import { RxEnterFullScreen, RxExitFullScreen } from "react-icons/rx";
-import ChangeThemes from "./ChangesThemes";
+// import ChangeThemes from "./ChangesThemes";
 // import toast from "react-hot-toast";
 import { menu } from "./menu/data";
 import MenuItem from "./menu/MenuItem";
@@ -147,9 +147,9 @@ const Navbar = () => {
         </button> */}
 
         {/* theme */}
-        <div className="px-0 xl:px-auto btn btn-circle btn-ghost xl:mr-1">
+        {/* <div className="px-0 xl:px-auto btn btn-circle btn-ghost xl:mr-1">
           <ChangeThemes />
-        </div>
+        </div> */}
 
         {/* avatar dropdown */}
         <div className="dropdown dropdown-end">

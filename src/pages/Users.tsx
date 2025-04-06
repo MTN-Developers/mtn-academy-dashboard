@@ -25,6 +25,8 @@ const Users = () => {
     staleTime: 5000, // Keeps previous data for 5 seconds
   });
 
+  // console.log("Users data", data?.data.data);
+
   const columnHelper = createColumnHelper<User>();
   // Update columns definition with explicit typing
   const columns = [
@@ -56,6 +58,22 @@ const Users = () => {
     columnHelper.accessor("created_at", {
       header: "Created At",
       cell: ({ getValue }) => new Date(getValue()).toISOString().split("T")[0],
+    }),
+    columnHelper.accessor("courses", {
+      header: "has Courses",
+      cell: ({ getValue }) => {
+        console.log("Courses", getValue());
+        const courses = getValue() as string[];
+        return (
+          <>
+            {courses.length > 0 ? (
+              <div className="badge badge-success"></div>
+            ) : (
+              <div className="badge badge-warning"></div>
+            )}
+          </>
+        );
+      },
     }),
   ];
 

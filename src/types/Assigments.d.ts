@@ -16,4 +16,12 @@ interface UserAnswer {
   updated_at: string; // ISO date string
   created_at: string; // ISO date string
   deleted_at: string | null;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    gender: "male" | "female" | string; // You can restrict values further if needed
+    phone: string;
+    avatar: string | null;
+  };
 }

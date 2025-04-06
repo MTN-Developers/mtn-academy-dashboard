@@ -28,6 +28,7 @@ interface User {
   phone: string;
   project_name: string | null;
   gender: string;
+  courses?: string[] | [];
 }
 
 interface Meta {

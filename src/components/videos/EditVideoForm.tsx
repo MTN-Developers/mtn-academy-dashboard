@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 interface EditVideoFormProps {
   video: Video;
   chapterId: string;
+  courseId?: string;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -26,7 +27,12 @@ const editVideoSchema = z.object({
 
 type EditVideoFormData = z.infer<typeof editVideoSchema>;
 
-const EditVideoForm = ({ video, onSuccess, onCancel }: EditVideoFormProps) => {
+const EditVideoForm = ({
+  courseId,
+  video,
+  onSuccess,
+  onCancel,
+}: EditVideoFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -34,6 +40,7 @@ const EditVideoForm = ({ video, onSuccess, onCancel }: EditVideoFormProps) => {
 
   const {
     handleSubmit,
+    reset,
     register,
     formState: { errors },
   } = useForm<EditVideoFormData>({
@@ -66,12 +73,22 @@ const EditVideoForm = ({ video, onSuccess, onCancel }: EditVideoFormProps) => {
 
       toast.success("Video updated successfully");
 
-      // Invalidate and refetch queries
-      queryClient.invalidateQueries({
-        queryKey: ["course-by-slug", courseSlug],
-      });
+      // For regular videos
+      if (courseSlug) {
+        queryClient.invalidateQueries({
+          queryKey: ["course-by-slug", courseSlug],
+        });
+      }
+
+      // For practical exercise videos
+      if (courseId) {
+        queryClient.invalidateQueries({
+          queryKey: ["practical-ex-videos", courseId],
+        });
+      }
 
       onSuccess?.();
+      reset();
     } catch (error: any) {
       console.error("Error updating video:", error);
 
