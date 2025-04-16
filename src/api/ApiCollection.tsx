@@ -166,6 +166,11 @@ export const fetchUsers = async ({
   }
 };
 
+//update user note
+export const updateUserNote = async (id: string, note: string) => {
+  return axiosInstance.patch(`/user/${id}`, { note });
+};
+
 // GET SINGLE USER
 export const fetchSingleUser = async (id: string) => {
   const response = await axios

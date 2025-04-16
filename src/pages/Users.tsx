@@ -3,32 +3,47 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import DataTable from "../components/DataTable";
-import { fetchUsers } from "../api/ApiCollection";
 import toast from "react-hot-toast";
 
+// The new import for our NoteModal
+import NoteModal from "../components/users/NoteModal";
+
+import { fetchUsers } from "../api/ApiCollection";
+
 const Users = () => {
-  //   const [isOpen, setIsOpen] = React.useState(false);
+  // Pagination & search states
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 100,
   });
   const [searchQuery, setSearchQuery] = React.useState("");
 
+  // State for controlling the Note modal
+  const [isNoteModalOpen, setIsNoteModalOpen] = React.useState(false);
+  const [selectedUserForNote, setSelectedUserForNote] =
+    React.useState<any>(null);
+
+  // Close the modal
+  const handleCloseNoteModal = () => {
+    setIsNoteModalOpen(false);
+    setSelectedUserForNote(null);
+  };
+
+  // Fetching users with React Query
   const { isLoading, isError, isSuccess, data } = useQuery({
     queryKey: ["users", pagination, searchQuery],
     queryFn: () =>
       fetchUsers({
-        page: pagination.pageIndex + 1, // Convert to 1-based index
+        page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
         search: searchQuery,
       }),
-    staleTime: 5000, // Keeps previous data for 5 seconds
+    staleTime: 5000,
   });
 
-  // console.log("Users data", data?.data.data);
-
   const columnHelper = createColumnHelper<User>();
-  // Update columns definition with explicit typing
+
+  // Define columns
   const columns = [
     columnHelper.accessor("name", {
       header: "Name",
@@ -46,9 +61,6 @@ const Users = () => {
         </div>
       ),
     }),
-    columnHelper.accessor("id", {
-      header: "ID",
-    }),
     columnHelper.accessor("email", {
       header: "Email",
     }),
@@ -62,21 +74,39 @@ const Users = () => {
     columnHelper.accessor("courses", {
       header: "has Courses",
       cell: ({ getValue }) => {
-        // console.log("Courses", getValue());
         const courses = getValue() as string[];
+        return courses.length > 0 ? (
+          <div className="badge badge-success" />
+        ) : (
+          <div className="badge badge-warning" />
+        );
+      },
+    }),
+    columnHelper.accessor("note", {
+      header: "Note",
+      cell: ({ row, getValue }) => {
+        const note = getValue();
         return (
-          <>
-            {courses.length > 0 ? (
-              <div className="badge badge-success"></div>
+          <button
+            onClick={() => {
+              setSelectedUserForNote(row.original);
+              setIsNoteModalOpen(true);
+            }}
+          >
+            {note ? (
+              <div className="badge badge-dash badge-success text-white ">
+                Edit note
+              </div>
             ) : (
-              <div className="badge badge-warning"></div>
+              <div className="badge badge-dash badge-warning">Add note</div>
             )}
-          </>
+          </button>
         );
       },
     }),
   ];
 
+  // Toast notifications for loading/error/success
   React.useEffect(() => {
     const toastId = "usersFetch";
     if (isLoading) toast.loading("Loading...", { id: toastId });
@@ -94,7 +124,7 @@ const Users = () => {
             <h2 className="font-bold text-2xl xl:text-4xl text-base-content">
               Users
             </h2>
-            {data?.data.meta && (
+            {data?.data?.meta && (
               <span className="text-neutral font-medium text-base">
                 {data.data.meta.total} Users Found
               </span>
@@ -102,9 +132,10 @@ const Users = () => {
           </div>
         </div>
 
+        {/* The Table */}
         <DataTable
           columns={columns}
-          data={data?.data.data || []}
+          data={data?.data?.data || []}
           meta={data?.data?.meta}
           isLoading={isLoading}
           pagination={pagination}
@@ -116,6 +147,13 @@ const Users = () => {
           }}
         />
       </div>
+
+      {/* Render NoteModal if needed */}
+      <NoteModal
+        isOpen={isNoteModalOpen && selectedUserForNote !== null}
+        onClose={handleCloseNoteModal}
+        user={selectedUserForNote || { id: "", note: "" }}
+      />
     </div>
   );
 };

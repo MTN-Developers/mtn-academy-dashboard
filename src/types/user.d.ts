@@ -29,6 +29,7 @@ interface User {
   project_name: string | null;
   gender: string;
   courses?: string[] | [];
+  note: null | string;
 }
 
 interface Meta {
