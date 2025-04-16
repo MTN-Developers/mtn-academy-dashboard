@@ -112,7 +112,7 @@ const DataTable = <TData extends { id: string }>({
       <div className="flex justify-between items-center mb-2">
         <input
           value={globalFilter}
-          onChange={(e) => setGlobalFilter(e.target.value)}
+          onChange={(e) => setGlobalFilter(e.target.value.trim())}
           placeholder="Search users..."
           className="input input-bordered max-w-xs"
           disabled={isLoading}
