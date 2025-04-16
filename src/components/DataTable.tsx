@@ -11,7 +11,6 @@ import {
   RowSelectionState,
 } from "@tanstack/react-table";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
-// import toast from "react-hot-toast";
 import AssignCourseModal from "./users/AssignCourseModal";
 
 interface DataTableProps<TData> {
@@ -54,6 +53,7 @@ const DataTable = <TData extends { id: string }>({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<TData | null>(null);
+
   const columnHelper = createColumnHelper<TData>();
 
   // Action column configuration
@@ -77,13 +77,19 @@ const DataTable = <TData extends { id: string }>({
     ),
   });
 
-  // Debounce search input
+  /**
+   * Debounce the search:
+   * Wait 500 ms after the user finishes typing before
+   * calling onSearchChange() with the trimmed string.
+   */
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onSearchChange(globalFilter);
+    const timeoutId = setTimeout(() => {
+      // Only call the parent onSearchChange after 500 ms
+      onSearchChange(globalFilter.trim());
     }, 500);
-    return () => clearTimeout(timeout);
-  }, [globalFilter]);
+
+    return () => clearTimeout(timeoutId);
+  }, [globalFilter, onSearchChange]);
 
   const table = useReactTable({
     data,
@@ -101,33 +107,9 @@ const DataTable = <TData extends { id: string }>({
     rowCount: meta?.total || 0,
   });
 
-  //   const handleDeleteSelected = () => {
-  //     const selectedIds = table
-  //       .getSelectedRowModel()
-  //       .rows.map((row) => row.original.id);
-  //     if (selectedIds.length === 0) {
-  //       toast("No items selected!", { icon: "⚠️" });
-  //       return;
-  //     }
-  //     onDeleteSelected?.(selectedIds);
-  //     setRowSelection({});
-  //   };
-
   return (
     <div className="w-full bg-base-100 text-base-content">
       <div className="flex justify-between items-center mb-2">
-        {/* <div className="flex gap-2">
-          {onDeleteSelected && (
-            <button
-              className="btn btn-danger"
-              onClick={handleDeleteSelected}
-              disabled={table.getSelectedRowModel().rows.length === 0}
-            >
-              Delete Selected ({table.getSelectedRowModel().rows.length})
-            </button>
-          )}
-        </div> */}
-
         <input
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
@@ -241,6 +223,7 @@ const DataTable = <TData extends { id: string }>({
         </div>
       )}
 
+      {/* Example for a separate modal */}
       {isModalOpen && selectedItem && (
         <AssignCourseModal
           isOpen={isModalOpen}
