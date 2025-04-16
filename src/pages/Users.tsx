@@ -31,7 +31,7 @@ const Users = () => {
 
   // Fetching users with React Query
   const { isLoading, isError, isSuccess, data } = useQuery({
-    queryKey: ["users", pagination, searchQuery],
+    queryKey: ["users", pagination, searchQuery.trim()],
     queryFn: () =>
       fetchUsers({
         page: pagination.pageIndex + 1,
