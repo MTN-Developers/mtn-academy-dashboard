@@ -72,15 +72,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
       const response = await authApi.login({ email, password });
       const { access_token, refresh_token } = response.data.data;
-      setTokens({
-        accessToken: access_token,
-        refreshToken: refresh_token,
-      });
-      setIsAuthenticated(true);
-      setPermissions(response.data.data.roleWithPermissions.permissions || []);
-      setRole(response.data.data.roleWithPermissions?.role_name || null);
-      localStorage.setItem("refreshToken", refresh_token);
-      localStorage.setItem("accessToken", access_token);
+
+      if (response.data.data.user.role !== "user") {
+        setTokens({
+          accessToken: access_token,
+          refreshToken: refresh_token,
+        });
+        setIsAuthenticated(true);
+        setPermissions(
+          response.data.data.roleWithPermissions.permissions || []
+        );
+        setRole(response.data.data.roleWithPermissions?.role_name || null);
+        localStorage.setItem("refreshToken", refresh_token);
+        localStorage.setItem("accessToken", access_token);
+      } else {
+        toast.error("You are not authorized to login to this application");
+        setTokens(null);
+        setIsAuthenticated(false);
+        setPermissions([]);
+        setRole(null);
+      }
+
       setLoading(false);
     } catch (error) {
       toast.error(`error in authenticating context : ${error}`);
