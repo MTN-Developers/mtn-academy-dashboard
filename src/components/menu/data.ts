@@ -34,6 +34,12 @@ export const menu = [
       },
       {
         isLink: true,
+        url: "/freestudy",
+        icon: RiBookMarkedLine,
+        label: "Free studies",
+      },
+      {
+        isLink: true,
         url: "/users",
         icon: HiOutlineUsers,
         label: "Users",
