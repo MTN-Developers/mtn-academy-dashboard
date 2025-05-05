@@ -36,7 +36,7 @@ const FreeStudyCard = ({
   };
 
   const handleViewCourses = () => {
-    navigate(`/freestudy/${study.id}/study`);
+    navigate(`/freestudy/${study.slug}/chapters`);
   };
   return (
     <div className="card bg-base-100 w-auto shadow-xl">
