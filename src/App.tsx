@@ -34,6 +34,9 @@ import MaterialsPage from "./pages/materials/MaterialsPage";
 import VideoAssigmentPage from "./pages/video-assigment/VideoAssigmentPage";
 import AssigmentAnswersPage from "./pages/video-assigment/AssigmentAnswersPage";
 import PracticalExercisesPage from "./pages/practical-exercises/PracticalExercisesPage";
+import FreeStudiesPage from "./pages/freeStudies/FreeStudiesPage";
+import FreeStudyChapterPage from "./pages/freeStudies/FreeStudyChapterPage";
+import FreeStudyVideosPage from "./pages/freeStudies/FreeStudyVideosPage";
 
 function App() {
   const Layout = () => {
@@ -238,6 +241,30 @@ function App() {
           element: (
             <ProtectedRoute>
               <AssigmentAnswersPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/freestudy",
+          element: (
+            <ProtectedRoute>
+              <FreeStudiesPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/freestudy/:slug/chapters",
+          element: (
+            <ProtectedRoute>
+              <FreeStudyChapterPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/freestudy/:slug/chapters/:chapterId/videos",
+          element: (
+            <ProtectedRoute>
+              <FreeStudyVideosPage />
             </ProtectedRoute>
           ),
         },

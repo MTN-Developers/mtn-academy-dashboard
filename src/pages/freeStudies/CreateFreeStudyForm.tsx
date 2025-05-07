@@ -1,4 +1,3 @@
-// components/semesters/EditSemesterForm.tsx
 import React, { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -6,34 +5,48 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Course } from "../../types/courses";
 
-const editCourseSchema = z.object({
+/** 1) Define the Zod schema and TS type */
+const createSemesterSchema = z.object({
   name_ar: z.string().nonempty("Arabic name is required"),
   name_en: z.string().nonempty("English name is required"),
   description_ar: z.string().nonempty("Arabic description is required"),
   description_en: z.string().nonempty("English description is required"),
   slug: z.string().nonempty("Slug is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
-  // price: z.coerce.number().positive("Price must be a positive number"),
-  logo_ar: z.any().optional(),
-  logo_en: z.any().optional(),
+  price: z.coerce.number().positive("Price must be a positive number"),
+  price_after_discount: z.coerce
+    .number()
+    .positive("Price must be a positive number"),
+  image_url_ar: z
+    .any()
+    .refine(
+      (files) => files instanceof FileList && files.length > 0,
+      "Arabic image is required."
+    ),
+
+  image_url_en: z
+    .any()
+    .refine(
+      (files) => files instanceof FileList && files.length > 0,
+      "Arabic image is required."
+    ),
 });
+type CreateSemesterFormData = z.infer<typeof createSemesterSchema>;
 
-type EditSemesterFormData = z.infer<typeof editCourseSchema>;
-
-interface EditSemesterFormProps {
-  course: Course;
-  onSuccess?: () => void;
-  onCancel?: () => void;
+/** 2) Props to handle success or closing a modal, if desired */
+interface CreateSemesterFormProps {
+  onSuccess?: () => void; // optional callback if parent wants to do something on success
+  onCancel?: () => void; // optional callback if parent wants to do something on cancel
 }
 
-const EditCourseForm: React.FC<EditSemesterFormProps> = ({
-  course,
+const CreateFreeStudyForm: React.FC<CreateSemesterFormProps> = ({
   onSuccess,
   onCancel,
 }) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  /** 3) Set up React Hook Form */
+
+  const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state
   const [serverError, setServerError] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
@@ -41,27 +54,16 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EditSemesterFormData>({
-    resolver: zodResolver(editCourseSchema),
-    defaultValues: {
-      name_ar: course.name_ar,
-      name_en: course.name_en,
-      description_ar: course.description_ar,
-      description_en: course.description_en,
-      slug: course.slug,
-      logo_ar: course.logo_ar,
-      logo_en: course.logo_en,
-      promotion_video_url: course.promotion_video_url || "",
-      //   price: course.price,
-    },
+    reset,
+  } = useForm<CreateSemesterFormData>({
+    resolver: zodResolver(createSemesterSchema),
   });
 
-  const onSubmit = async (data: EditSemesterFormData) => {
-    // console.log("data", data);
-
-    setIsSubmitting(true);
+  /** 4) Submit handler */
+  const onSubmit = async (data: CreateSemesterFormData) => {
+    setIsSubmitting(true); // Set loading to true when submission starts
     try {
-      setServerError(null);
+      setServerError(null); // Reset any previous error
 
       const formData = new FormData();
       formData.append("name_ar", data.name_ar);
@@ -70,47 +72,59 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       formData.append("description_en", data.description_en);
       formData.append("slug", data.slug);
       formData.append("promotion_video_url", data.promotion_video_url);
-      //   formData.append("price", String(data.price));
+      formData.append("price", String(data.price));
+      formData.append(
+        "price_after_discount",
+        String(data.price_after_discount)
+      );
 
-      if (data.logo_ar instanceof FileList && data.logo_ar.length) {
-        formData.append("logo_ar", data.logo_ar[0]);
+      if (data.image_url_ar?.[0]) {
+        formData.append("logo_ar", data.image_url_ar[0]);
       }
-      if (data.logo_en instanceof FileList && data.logo_en.length) {
-        formData.append("logo_en", data.logo_en[0]);
+      if (data.image_url_en?.[0]) {
+        formData.append("logo_en", data.image_url_en[0]);
       }
 
-      // Make PATCH request
-      await axiosInstance.put(`/course/${course.id}`, formData, {
+      // Make POST request
+      await axiosInstance.post("/free-study", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Course updated successfully");
+      toast.success("Semester added successfully");
       queryClient.invalidateQueries({
-        queryKey: ["course"],
+        queryKey: ["free-studies"],
       });
 
       onSuccess?.();
+      reset();
     } catch (error: any) {
       if (error?.response?.status === 409) {
+        // e.g. "Record already exists"
         setServerError(error.response.data.message ?? "Conflict error");
       } else {
         setServerError("Something went wrong, please try again.");
       }
-      toast.error("Error updating course");
-      console.error("Error updating course:", error);
+
+      toast.error("Error adding semester");
+      console.error("Error creating semester:", error);
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false); // Set loading to false when submission ends
     }
   };
 
+  // 3) A helper to clear fields on Cancel
+  const handleCancel = () => {
+    reset(); // reset all fields
+    onCancel?.(); // then let parent know (so it can close the modal, etc.)
+  };
+
+  /** 5) Render the form (no <dialog> here) */
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       encType="multipart/form-data"
       className="space-y-4"
     >
-      {/* Form fields - same as CreateSemesterForm but with defaultValues */}
-      {/* ... copy all the form fields from CreateSemesterForm ... */}
       {/* Arabic Name */}
       <div>
         <label className="block mb-1">Arabic Name</label>
@@ -194,7 +208,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       </div>
 
       {/* Price */}
-      {/* <div>
+      <div>
         <label className="block mb-1">Price</label>
         <input
           type="number"
@@ -205,7 +219,23 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
         {errors.price && (
           <p className="text-red-500 text-sm">{errors.price.message}</p>
         )}
-      </div> */}
+      </div>
+
+      {/* Price after discount*/}
+      <div>
+        <label className="block mb-1">Price after discount</label>
+        <input
+          type="number"
+          step="0.01"
+          className="input input-bordered w-full"
+          {...register("price_after_discount")}
+        />
+        {errors.price_after_discount && (
+          <p className="text-red-500 text-sm">
+            {errors.price_after_discount.message}
+          </p>
+        )}
+      </div>
 
       {/* Image (Arabic) */}
       <div>
@@ -214,7 +244,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("logo_ar")}
+          {...register("image_url_ar")}
         />
       </div>
 
@@ -225,17 +255,20 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("logo_en")}
+          {...register("image_url_en")}
         />
       </div>
 
+      {/* If there's a server error, display it above the Save button */}
       {serverError && <p className="text-red-600">{serverError}</p>}
 
+      {/* Form Buttons */}
       <div className="flex justify-end gap-2">
+        {/* Submit Button */}
         <button
           type="submit"
           className="btn btn-primary"
-          disabled={isSubmitting}
+          disabled={isSubmitting} // Disable button while submitting
         >
           {isSubmitting ? (
             <>
@@ -243,15 +276,16 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
               Loading...
             </>
           ) : (
-            "Update"
+            "Save"
           )}
         </button>
 
+        {/* Cancel Button */}
         <button
           type="button"
           className="btn"
-          onClick={onCancel}
-          disabled={isSubmitting}
+          onClick={handleCancel}
+          disabled={isSubmitting} // Optionally disable cancel while submitting
         >
           Cancel
         </button>
@@ -260,4 +294,4 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
   );
 };
 
-export default EditCourseForm;
+export default CreateFreeStudyForm;

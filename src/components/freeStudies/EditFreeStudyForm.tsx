@@ -6,30 +6,33 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { Course } from "../../types/courses";
+import { FreeStudyCourse } from "../../types/freeStudy";
 
-const editCourseSchema = z.object({
+const editSemesterSchema = z.object({
   name_ar: z.string().nonempty("Arabic name is required"),
   name_en: z.string().nonempty("English name is required"),
   description_ar: z.string().nonempty("Arabic description is required"),
   description_en: z.string().nonempty("English description is required"),
   slug: z.string().nonempty("Slug is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
-  // price: z.coerce.number().positive("Price must be a positive number"),
-  logo_ar: z.any().optional(),
-  logo_en: z.any().optional(),
+  price: z.coerce.number().positive("Price must be a positive number"),
+  price_after_discount: z.coerce
+    .number()
+    .positive("Price must be a positive number"),
+  image_url_ar: z.any(),
+  image_url_en: z.any(),
 });
 
-type EditSemesterFormData = z.infer<typeof editCourseSchema>;
+type EditSemesterFormData = z.infer<typeof editSemesterSchema>;
 
 interface EditSemesterFormProps {
-  course: Course;
+  study: FreeStudyCourse;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-const EditCourseForm: React.FC<EditSemesterFormProps> = ({
-  course,
+const EditFreeStudyForm: React.FC<EditSemesterFormProps> = ({
+  study,
   onSuccess,
   onCancel,
 }) => {
@@ -42,23 +45,22 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
     handleSubmit,
     formState: { errors },
   } = useForm<EditSemesterFormData>({
-    resolver: zodResolver(editCourseSchema),
+    resolver: zodResolver(editSemesterSchema),
     defaultValues: {
-      name_ar: course.name_ar,
-      name_en: course.name_en,
-      description_ar: course.description_ar,
-      description_en: course.description_en,
-      slug: course.slug,
-      logo_ar: course.logo_ar,
-      logo_en: course.logo_en,
-      promotion_video_url: course.promotion_video_url || "",
-      //   price: course.price,
+      name_ar: study.name_ar,
+      name_en: study.name_en,
+      description_ar: study.description_ar || "",
+      description_en: study.description_en || "",
+      slug: study.slug,
+      promotion_video_url: study.promotion_video_url || "",
+      price: study.price || 0,
+      price_after_discount: study.price_after_discount || 0,
+      // image_url_ar: semester.image_url_ar,
+      // image_url_en: semester.image_url_en,
     },
   });
 
   const onSubmit = async (data: EditSemesterFormData) => {
-    // console.log("data", data);
-
     setIsSubmitting(true);
     try {
       setServerError(null);
@@ -70,23 +72,27 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       formData.append("description_en", data.description_en);
       formData.append("slug", data.slug);
       formData.append("promotion_video_url", data.promotion_video_url);
-      //   formData.append("price", String(data.price));
+      formData.append("price", String(data.price));
+      formData.append(
+        "price_after_discount",
+        String(data.price_after_discount)
+      );
 
-      if (data.logo_ar instanceof FileList && data.logo_ar.length) {
-        formData.append("logo_ar", data.logo_ar[0]);
+      if (data.image_url_ar?.[0]) {
+        formData.append("logo_ar", data.image_url_ar[0]);
       }
-      if (data.logo_en instanceof FileList && data.logo_en.length) {
-        formData.append("logo_en", data.logo_en[0]);
+      if (data.image_url_en?.[0]) {
+        formData.append("logo_en", data.image_url_en[0]);
       }
 
       // Make PATCH request
-      await axiosInstance.put(`/course/${course.id}`, formData, {
+      await axiosInstance.put(`/free-study/${study.id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Course updated successfully");
+      toast.success("Semester updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["course"],
+        queryKey: ["free-studies"],
       });
 
       onSuccess?.();
@@ -96,8 +102,8 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       } else {
         setServerError("Something went wrong, please try again.");
       }
-      toast.error("Error updating course");
-      console.error("Error updating course:", error);
+      toast.error("Error updating semester");
+      console.error("Error updating semester:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -194,7 +200,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       </div>
 
       {/* Price */}
-      {/* <div>
+      <div>
         <label className="block mb-1">Price</label>
         <input
           type="number"
@@ -205,7 +211,22 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
         {errors.price && (
           <p className="text-red-500 text-sm">{errors.price.message}</p>
         )}
-      </div> */}
+      </div>
+
+      <div>
+        <label className="block mb-1">Price after discount</label>
+        <input
+          type="number"
+          step="0.01"
+          className="input input-bordered w-full"
+          {...register("price_after_discount")}
+        />
+        {errors.price && (
+          <p className="text-red-500 text-sm">
+            {errors.price_after_discount?.message}
+          </p>
+        )}
+      </div>
 
       {/* Image (Arabic) */}
       <div>
@@ -214,7 +235,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("logo_ar")}
+          {...register("image_url_ar")}
         />
       </div>
 
@@ -225,7 +246,7 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
           type="file"
           accept="image/*"
           className="file-input file-input-bordered w-full"
-          {...register("logo_en")}
+          {...register("image_url_en")}
         />
       </div>
 
@@ -260,4 +281,4 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
   );
 };
 
-export default EditCourseForm;
+export default EditFreeStudyForm;
