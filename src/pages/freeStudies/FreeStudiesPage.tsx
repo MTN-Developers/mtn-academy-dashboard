@@ -1,11 +1,12 @@
-import useGetAllSemesters from "../../hooks/useGetAllSemesters";
+// import useGetAllSemesters from "../../hooks/useGetAllSemesters";
 import Loader from "../../components/Loader";
-import SemesterCard from "../../components/semesters/SemesterCard";
+// import SemesterCard from "../../components/semesters/SemesterCard";
 
 // Import the new form component
-import CreateSemesterForm from "../../components/semesters/CreateSemesterForm";
+// import CreateSemesterForm from "../../components/semesters/CreateSemesterForm";
 import useGetAllFreeStudies from "../../hooks/freeStudies/useGetAllGetFreeStudies";
 import FreeStudyCard from "../../components/freeStudies/FreeStudyCard";
+import CreateFreeStudyForm from "./createFreeStudyForm";
 
 const FreeStudiesPage = () => {
   const {
@@ -58,7 +59,7 @@ const FreeStudiesPage = () => {
           <h3 className="font-bold text-lg">Add New Free Study</h3>
 
           {/* Render the separate form component */}
-          <CreateSemesterForm
+          <CreateFreeStudyForm
             onSuccess={handleCloseModal} // close on success
             onCancel={handleCloseModal} // close on cancel
           />
@@ -74,7 +75,7 @@ const FreeStudiesPage = () => {
             created_at={study.created_at}
             description_ar={study.description_ar || ""}
             id={study.id}
-            image_url_ar={study.banner_ar || ""}
+            image_url_ar={study.logo_ar || ""}
             name_ar={study.name_ar}
             price={study.price || 0}
             slug={study.slug}
