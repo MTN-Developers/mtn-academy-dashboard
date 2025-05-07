@@ -6,7 +6,7 @@ import Loader from "../../components/Loader";
 // import CreateSemesterForm from "../../components/semesters/CreateSemesterForm";
 import useGetAllFreeStudies from "../../hooks/freeStudies/useGetAllGetFreeStudies";
 import FreeStudyCard from "../../components/freeStudies/FreeStudyCard";
-import CreateFreeStudyForm from "./createFreeStudyForm";
+import CreateFreeStudyForm from "./CreateFreeStudyForm";
 
 const FreeStudiesPage = () => {
   const {

@@ -16,8 +16,8 @@ const editCourseSchema = z.object({
   slug: z.string().nonempty("Slug is required"),
   promotion_video_url: z.string().nonempty("Promotion video URL is required"),
   // price: z.coerce.number().positive("Price must be a positive number"),
-  logo_ar: z.any(),
-  logo_en: z.any(),
+  logo_ar: z.any().optional(),
+  logo_en: z.any().optional(),
 });
 
 type EditSemesterFormData = z.infer<typeof editCourseSchema>;
@@ -72,10 +72,10 @@ const EditCourseForm: React.FC<EditSemesterFormProps> = ({
       formData.append("promotion_video_url", data.promotion_video_url);
       //   formData.append("price", String(data.price));
 
-      if (data.logo_ar?.[0]) {
+      if (data.logo_ar instanceof FileList && data.logo_ar.length) {
         formData.append("logo_ar", data.logo_ar[0]);
       }
-      if (data.logo_en?.[0]) {
+      if (data.logo_en instanceof FileList && data.logo_en.length) {
         formData.append("logo_en", data.logo_en[0]);
       }
 

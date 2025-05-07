@@ -92,7 +92,7 @@ const EditFreeStudyForm: React.FC<EditSemesterFormProps> = ({
 
       toast.success("Semester updated successfully");
       queryClient.invalidateQueries({
-        queryKey: ["semesters"],
+        queryKey: ["free-studies"],
       });
 
       onSuccess?.();
