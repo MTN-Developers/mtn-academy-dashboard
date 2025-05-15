@@ -37,6 +37,7 @@ import PracticalExercisesPage from "./pages/practical-exercises/PracticalExercis
 import FreeStudiesPage from "./pages/freeStudies/FreeStudiesPage";
 import FreeStudyChapterPage from "./pages/freeStudies/FreeStudyChapterPage";
 import FreeStudyVideosPage from "./pages/freeStudies/FreeStudyVideosPage";
+import CourseRequestsPage from "./pages/CourseRequest/CourseRequestPage";
 
 function App() {
   const Layout = () => {
@@ -257,6 +258,14 @@ function App() {
           element: (
             <ProtectedRoute>
               <FreeStudyChapterPage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "/requests",
+          element: (
+            <ProtectedRoute>
+              <CourseRequestsPage />
             </ProtectedRoute>
           ),
         },
