@@ -53,6 +53,13 @@ const CourseRequestsPage = () => {
       id: "courseName",
       header: "Course",
     }),
+    columnHelper.accessor(
+      (row) => row.course.course_type.split("_").join(" "),
+      {
+        id: "courseType",
+        header: "type",
+      }
+    ),
     columnHelper.accessor("status", {
       header: "Status",
       cell: ({ getValue }) => {

@@ -20,5 +20,6 @@ type CourseRequest = {
     name_ar: string;
     logo_en: string;
     logo_ar: string;
+    course_type: string;
   };
 };
