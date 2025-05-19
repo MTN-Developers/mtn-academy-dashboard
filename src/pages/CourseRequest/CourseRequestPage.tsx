@@ -49,7 +49,7 @@ const CourseRequestsPage = () => {
       id: "userPhone",
       header: "Phone",
     }),
-    columnHelper.accessor((row) => row.course.name_en, {
+    columnHelper.accessor((row) => row.course.name_ar, {
       id: "courseName",
       header: "Course",
     }),
