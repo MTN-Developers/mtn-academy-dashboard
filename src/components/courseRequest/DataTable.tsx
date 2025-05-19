@@ -119,26 +119,26 @@ const DataTable = <TData extends { id: string }>({
         />
       </div>
 
-      <div className="border rounded-lg overflow-x-auto shadow-lg">
-        <table className="w-full">
-          <thead className="bg-gray-50">
+      <div className="rounded-xl overflow-x-auto shadow ring-1 ring-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
+          <thead className="bg-base-200">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {onDeleteSelected && (
-                  <th className="px-6 py-4">
+                  <th className="px-4 py-3">
                     <input
                       type="checkbox"
                       checked={table.getIsAllRowsSelected()}
                       onChange={table.getToggleAllRowsSelectedHandler()}
-                      title="Select row"
-                      aria-label="Select row"
+                      className="checkbox checkbox-sm"
+                      title="Select all"
                     />
                   </th>
                 )}
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                    className="px-4 py-3 text-left font-semibold text-gray-600 uppercase tracking-wide"
                   >
                     {flexRender(
                       header.column.columnDef.header,
@@ -149,28 +149,22 @@ const DataTable = <TData extends { id: string }>({
               </tr>
             ))}
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-gray-100 bg-white">
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-50">
+              <tr key={row.id} className="hover:bg-gray-50 transition">
                 {onDeleteSelected && (
-                  <td className="px-6 py-4">
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={row.getIsSelected()}
-                        onChange={row.getToggleSelectedHandler()}
-                        title="Select row"
-                        aria-label="Select row"
-                      />
-                      <span className="sr-only">Select row</span>
-                    </label>
+                  <td className="px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={row.getIsSelected()}
+                      onChange={row.getToggleSelectedHandler()}
+                      className="checkbox checkbox-sm"
+                      title="Select row"
+                    />
                   </td>
                 )}
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm"
-                  >
+                  <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
@@ -180,7 +174,7 @@ const DataTable = <TData extends { id: string }>({
         </table>
 
         {data.length === 0 && !isLoading && (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-6 text-gray-400">
             No data available
           </div>
         )}
