@@ -5,7 +5,7 @@ import { AuthResponse } from "../types/auth";
 export const baseURL = import.meta.env.VITE_BASE_URL;
 // || "https://api.mtninstitute.net/api";
 
-// console.log("baseURL", baseURL);
+console.log("baseURL", baseURL);
 
 const axiosInstance = axios.create({
   baseURL,
