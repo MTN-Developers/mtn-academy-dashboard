@@ -1,4 +1,4 @@
-name: Deploy Vite React App - MTN Academy Dashboard
+name: Deploy Vite React App - MTN Academy Dashboard Production
 
 on:
   push:
@@ -34,7 +34,6 @@ jobs:
         run: bun run build
         env:
           VITE_BACKEND_BASE_URL: ${{ secrets.VITE_BASE_URL }}
-          VITE_APP_BASE_NAME: ${{ secrets.VITE_APP_BASE_NAME }}
 
       - name: Deploy to VM
         run: |
