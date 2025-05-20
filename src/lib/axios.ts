@@ -10,6 +10,7 @@ declare module "axios" {
   }
 }
 
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL, // e.g. "https://api.example.com"
 });

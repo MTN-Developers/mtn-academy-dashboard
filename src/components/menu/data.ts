@@ -1,6 +1,7 @@
 // data.ts (or wherever your menu data is defined)
 import {
   HiOutlineHome,
+  HiOutlinePresentationChartBar,
   // HiOutlineUser,
   HiOutlineUsers,
   // HiOutlineCube,
@@ -49,6 +50,12 @@ export const menu = [
         url: "/events",
         icon: MdEvent,
         label: "Events",
+      },
+      {
+        isLink: true,
+        url: "/requests",
+        icon: HiOutlinePresentationChartBar,
+        label: "Requests",
       },
       // {
       //   isLink: true,

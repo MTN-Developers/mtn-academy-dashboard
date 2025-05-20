@@ -1,14 +1,14 @@
-name: Deploy Vite React App - MTN Academy Dashboard Production
+name: Deploy Vite React App - MTN Academy Dashboard staging
 
 on:
   push:
     branches:
-      - main
+      - staging
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: staging
 
     steps:
       - name: Checkout code
@@ -37,4 +37,4 @@ jobs:
 
       - name: Deploy to VM
         run: |
-          rsync -avz --delete ./dist/ ${{ secrets.VM_USER }}@${{ secrets.VM_IP }}:/var/www/html/mtn-academy-dashboard
+          rsync -avz --delete ./dist/ ${{ secrets.VM_USER }}@${{ secrets.VM_IP }}:/var/www/html/mtn-academy-dashboard-staging
