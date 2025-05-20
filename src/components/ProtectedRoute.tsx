@@ -12,9 +12,9 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requiredModule,
-  requiredAction = "read",
+  // requiredAction = "read",
 }) => {
-  const { isAuthenticated, loading, hasPermission } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -25,7 +25,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredModule && !hasPermission(requiredModule, requiredAction)) {
+  if (requiredModule) {
     return <Navigate to="/unauthorized" replace />;
   }
 
