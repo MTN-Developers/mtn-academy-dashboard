@@ -2,7 +2,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { IconType } from "react-icons";
-import { useAuth } from "../../contexts/AuthContext";
+// import { useAuth } from "../../contexts/AuthContext";
 
 interface MenuItem {
   isLink: boolean;
@@ -32,7 +32,7 @@ export interface MenuItemType {
 
 const MenuItem: React.FC<MenuItemProps> = ({ onClick, catalog, listItems }) => {
   // 🔑 Use your AuthContext to check permissions
-  const { hasPermission } = useAuth();
+  // const { isAuthenticated } = useAuth();
 
   return (
     <div className="w-full flex flex-col items-stretch gap-2">
@@ -42,13 +42,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ onClick, catalog, listItems }) => {
 
       {listItems.map((listItem, index) => {
         // ✅ If the item has a module/action, check permission
-        if (listItem.module && listItem.action) {
-          const isAllowed = hasPermission(listItem.module, listItem.action);
-          if (!isAllowed) {
-            // 🎯 Skip rendering if user is not allowed
-            return null;
-          }
-        }
+        // if (listItem.module && listItem.action) {
+        //   const isAllowed = hasPermission(listItem.module, listItem.action);
+        //   if (!isAllowed) {
+        //     // 🎯 Skip rendering if user is not allowed
+        //     return null;
+        //   }
+        // }
 
         // If item is a link
         if (listItem.isLink) {

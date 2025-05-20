@@ -1,14 +1,18 @@
-// types/auth.ts
-export interface Permission {
+// src/types/auth.ts
+export interface User {
   id: string;
+  name: string;
+  email: string;
+  role: "admin" | "staff" | "user";
   role_id: string;
-  module: string;
-  can_create: boolean;
-  can_read: boolean;
-  can_update: boolean;
-  can_delete: boolean;
 }
 
+export interface Tokens {
+  access_token: string;
+  refresh_token: string;
+}
+
+// Add this new interface for the refresh token response
 export interface RefreshTokenResponse {
   data: {
     access_token: string;
@@ -17,37 +21,12 @@ export interface RefreshTokenResponse {
   message: string;
 }
 
-export interface Role {
-  id: string;
-  role_name: string;
-  permissions: Permission[];
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  country: string;
-  phone: string;
-  project_name: string | null;
-  role: string;
-  role_id: string;
-  gender: string;
-  is_account_verified: boolean;
-}
-
-export interface AuthResponse {
+export interface LoginResponse {
   data: {
     access_token: string;
     refresh_token: string;
     user: User;
-    roleWithPermissions: Role;
   };
-  status: number;
-  message: string;
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
+  status: number; // 201
+  message: string; // "Success"
 }
