@@ -14,6 +14,7 @@ interface Profile {
 }
 
 interface User {
+  user: any;
   id: string;
   name: string;
   email: string;

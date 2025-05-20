@@ -28,6 +28,7 @@ export interface Course {
   is_locked?: boolean;
   is_completed: boolean;
   chapters: Chapter[] | [];
+  has_live: boolean;
 }
 
 export interface CourseResponse {
