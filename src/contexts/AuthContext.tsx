@@ -1,145 +1,101 @@
+"use client";
+//context/AuthContext.tsx
 import {
   createContext,
-  ReactNode,
   useContext,
-  useEffect,
   useState,
+  useEffect,
+  ReactNode,
 } from "react";
-import { authApi } from "../services/auth";
-import toast from "react-hot-toast";
-import { Permission } from "../types/auth";
+import { jwtDecode } from "jwt-decode";
 
-interface AuthContextType {
-  tokens: ITokens | null;
-  loading: boolean;
-  isAuthenticated: boolean;
+import api from "../lib/axios";
+import { LoginResponse, User } from "../types/auth";
+import {
+  clearAuthTokens,
+  getAuthTokens,
+  setAuthTokens,
+} from "../utils/authStorage";
+
+type AuthCtx = {
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  hasPermission: (
-    module: string,
-    action: "create" | "read" | "update" | "delete"
-  ) => boolean;
-  permissions: Permission[];
-  role: string | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+};
+
+export interface JwtPayload {
+  sub: string; // user id
+  email: string;
+  role: "admin" | "staff" | "user";
+  role_id: string;
+  name?: string;
+  exp?: number;
+  iat?: number;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-interface ITokens {
-  accessToken: string;
-  refreshToken: string;
-}
+const AuthContext = createContext<AuthCtx>({} as AuthCtx);
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [tokens, setTokens] = useState<ITokens | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const [permissions, setPermissions] = useState<Permission[]>([]);
-  const [role, setRole] = useState<string | null>(null);
 
+  // ——— bootstrap from localStorage on first load ———
   useEffect(() => {
-    checkAuth();
-  }, []);
+    setIsAuthenticated(false);
+    const { access_token } = getAuthTokens();
 
-  const checkAuth = async () => {
-    const savedRefreshToken = localStorage.getItem("refreshToken");
-    if (savedRefreshToken) {
+    if (access_token) {
       try {
-        const response = await authApi.refreshToken(savedRefreshToken);
-        setTokens({
-          accessToken: response.data.data.access_token,
-          refreshToken: savedRefreshToken,
+        const decoded = jwtDecode<JwtPayload>(access_token);
+
+        // console.log("deco", decoded);
+
+        setUser({
+          id: decoded.sub,
+          email: decoded.email,
+          role: decoded.role,
+          name: decoded.name ?? "",
+          role_id: decoded.role_id,
         });
-
-        // console.log("response from auth check auth", response.data.data);
-
         setIsAuthenticated(true);
-      } catch (error) {
-        // console.log("removed from checkauth", error);
-
-        localStorage.removeItem("refreshToken");
-        setTokens(null);
+      } catch {
+        clearAuthTokens();
         setIsAuthenticated(false);
-        setPermissions([]);
-        setRole(null);
       }
     }
     setLoading(false);
-  };
+  }, []);
 
+  // ——— API call to /auth/login ———
   const login = async (email: string, password: string) => {
-    try {
-      setLoading(true);
-      const response = await authApi.login({ email, password });
-      const { access_token, refresh_token } = response.data.data;
+    const res = await api.post<LoginResponse>("/auth/login", {
+      email,
+      password,
+    });
 
-      if (response.data.data.user.role !== "user") {
-        setTokens({
-          accessToken: access_token,
-          refreshToken: refresh_token,
-        });
-        setIsAuthenticated(true);
-        setPermissions(
-          response.data.data.roleWithPermissions.permissions || []
-        );
-        setRole(response.data.data.roleWithPermissions?.role_name || null);
-        localStorage.setItem("refreshToken", refresh_token);
-        localStorage.setItem("accessToken", access_token);
-      } else {
-        toast.error("You are not authorized to login to this application");
-        setTokens(null);
-        setIsAuthenticated(false);
-        setPermissions([]);
-        setRole(null);
-      }
-
-      setLoading(false);
-    } catch (error) {
-      toast.error(`error in authenticating context : ${error}`);
-      throw error;
-    }
+    const { access_token, refresh_token, user } = res.data.data;
+    setAuthTokens({ access_token, refresh_token });
+    setUser(user);
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
-    // console.log("removed from logged out in context");
-    localStorage.removeItem("refreshToken");
-    setTokens(null);
+    clearAuthTokens();
+    setUser(null);
     setIsAuthenticated(false);
-  };
-
-  const hasPermission = (module: string) => {
-    return permissions.some(
-      (permission) =>
-        permission.module === module &&
-        (permission.can_read ||
-          permission.can_create ||
-          permission.can_update ||
-          permission.can_delete)
-    );
+    // optional: redirect
+    window.location.replace("/login");
   };
 
   return (
     <AuthContext.Provider
-      value={{
-        tokens,
-        isAuthenticated,
-        loading,
-        login,
-        logout,
-        permissions,
-        role,
-        hasPermission,
-      }}
+      value={{ user, isAuthenticated, login, logout, loading }}
     >
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };
