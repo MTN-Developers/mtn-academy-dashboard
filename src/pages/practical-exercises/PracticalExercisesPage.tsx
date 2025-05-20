@@ -179,7 +179,7 @@ const PracticalExercisesPage = () => {
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-8">
         <div className="space-y-2 mb-4 md:mb-0">
-          <p className="text-gray-600">Parctical Exercises:</p>
+          <p className="text-gray-600">Practical Exercises:</p>
         </div>
         <div className="flex gap-2">
           <button onClick={handleOpenCreateModal} className="btn btn-primary">
