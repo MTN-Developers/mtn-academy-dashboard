@@ -6,6 +6,7 @@ interface IProps {
   limit: number;
   page: number;
   search: string;
+  status: string;
 }
 
 interface requestResponse {
@@ -13,16 +14,23 @@ interface requestResponse {
   meta: MetaData;
 }
 
-const useGetAllRequests = ({ limit = 10, page = 1, search = "" }: IProps) => {
+const useGetAllRequests = ({
+  limit = 10,
+  page = 1,
+  search = "",
+  status,
+}: IProps) => {
   const fetchRequests = useCallback(async () => {
     const response = await axiosInstance.get<{ data: requestResponse }>(
-      `/course-request?limit=${limit}&page=${page}&search=${search}`
+      `/course-request?limit=${limit}&page=${page}&search=${search}${
+        status !== "all" ? `&status=${status}` : ""
+      }`
     );
     return response.data.data;
-  }, [limit, page]);
+  }, [limit, page, search, status]);
 
   return useQuery({
-    queryKey: ["requests", { limit, page }],
+    queryKey: ["requests", { limit, page, search, status }],
     queryFn: fetchRequests,
   });
 };
