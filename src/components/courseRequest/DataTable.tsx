@@ -34,6 +34,8 @@ interface DataTableProps<TData> {
     pageSize: number;
   }) => void;
   onSearchChange: (search: string) => void;
+  filter: "all" | "pending" | "approved" | "rejected"; // filter by status
+  onFilterChange: (filter: "all" | "pending" | "approved" | "rejected") => void;
   includeActionColumn?: boolean;
   onDeleteSelected?: (selectedIds: string[]) => void;
 }
@@ -46,6 +48,8 @@ const DataTable = <TData extends { id: string }>({
   pagination,
   onPaginationChange,
   onSearchChange,
+  filter,
+  onFilterChange,
   includeActionColumn = false,
   onDeleteSelected,
 }: DataTableProps<TData>) => {
@@ -117,6 +121,25 @@ const DataTable = <TData extends { id: string }>({
           className="input input-bordered max-w-xs"
           disabled={isLoading}
         />
+        <div className="flex items-center gap-3 mb-4">
+          <label
+            htmlFor="statusFilter"
+            className="text-base-content font-medium"
+          >
+            Filter by Status:
+          </label>
+          <select
+            id="statusFilter"
+            className="select select-bordered select-sm"
+            value={filter}
+            onChange={(e) => onFilterChange(e.target.value as typeof filter)}
+          >
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
       </div>
 
       <div className="rounded-xl overflow-x-auto shadow ring-1 ring-gray-200">

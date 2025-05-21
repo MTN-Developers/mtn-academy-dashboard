@@ -7,6 +7,9 @@ import DataTable from "../../components/courseRequest/DataTable";
 const CourseRequestsPage = () => {
   // Pagination & search states
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState<
+    "all" | "pending" | "approved" | "rejected"
+  >("all");
 
   const [pagination, setPagination] = useState({
     pageIndex: 1,
@@ -17,6 +20,7 @@ const CourseRequestsPage = () => {
     limit: pagination.pageSize,
     page: pagination.pageIndex,
     search,
+    status,
   });
 
   const columnHelper = createColumnHelper<CourseRequest>();
@@ -99,6 +103,10 @@ const CourseRequestsPage = () => {
     return () => toast.dismiss(toastId);
   }, [isError, isLoading, isSuccess]);
 
+  useEffect(() => {
+    setPagination((prev) => ({ ...prev, pageIndex: 1 }));
+  }, [status]);
+
   return (
     <div className="w-full p-0 m-0">
       <div className="w-full flex flex-col items-stretch gap-3">
@@ -123,7 +131,9 @@ const CourseRequestsPage = () => {
           isLoading={isLoading}
           pagination={pagination}
           onPaginationChange={setPagination}
+          filter={status}
           onSearchChange={setSearch}
+          onFilterChange={setStatus}
           includeActionColumn={true}
           onDeleteSelected={async (ids) => {
             console.log("Deleting", ids);
